@@ -1,0 +1,21 @@
+:root {
+  font-family: var(--main-font);
+  line-height: var(--base-line-height);
+  color-scheme: light dark;
+  color: var(--base-font-color);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+p {
+}
+h1 {
+}
+h2 {
+}
+h3 {
+}
+h4 {
+}

@@ -1,0 +1,15 @@
+:root {
+  /* Color schema */
+
+  --primary: #ffa400;
+  --secondary: #009ddc;
+  --white: #fffcf9;
+  --black: #1e1e20;
+
+  --grey-500: #494b4f;
+
+  /* Fonts */
+  --main-font: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --base-font-color: var(--black);
+  --base-line-height: 1.2;
+}

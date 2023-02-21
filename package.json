@@ -1,0 +1,42 @@
+{
+  "name": "react-ts-sb-boilerplate",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "sb": "start-storybook -p 6006",
+    "build-sb": "build-storybook",
+    "test-sb": "test-storybook"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@storybook/addon-a11y": "^6.5.16",
+    "@storybook/addon-actions": "^6.5.16",
+    "@storybook/addon-essentials": "^6.5.16",
+    "@storybook/addon-interactions": "^6.5.16",
+    "@storybook/addon-links": "^6.5.16",
+    "@storybook/builder-vite": "^0.4.2",
+    "@storybook/react": "^6.5.16",
+    "@storybook/test-runner": "^0.9.4",
+    "@storybook/testing-library": "^0.0.13",
+    "@types/react": "^18.0.27",
+    "@types/react-dom": "^18.0.10",
+    "@vitejs/plugin-react": "^3.1.0",
+    "babel-loader": "^8.3.0",
+    "postcss": "^8.4.21",
+    "postcss-custom-media": "^9.1.2",
+    "postcss-import": "^15.1.0",
+    "postcss-mixins": "^9.0.4",
+    "postcss-nesting": "^11.2.1",
+    "postcss-preset-env": "^8.0.1",
+    "typescript": "^4.9.3",
+    "vite": "^4.1.0"
+  }
+}
