@@ -1,10 +1,7 @@
-function App() {
-  return (
-    <>
-      <h1>Hello!</h1>
-      <p>This is the base react-ts boilerplate</p>
-    </>
-  );
-}
+import { WindowsList } from "./components/containers/WindowsList";
+
+const App = () => {
+    return <WindowsList />;
+};
 
 export default App;
