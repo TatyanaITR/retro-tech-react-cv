@@ -1,7 +1,8 @@
 import React, { useEffect, useReducer, useState } from "react";
 import Window, { IWindow } from "../simple/Window/Window";
 import windowReducer from "../../core/store/windowReducer";
-import { getWindowCoords, ICoords, isWindowOpen } from "./helpers";
+import { getWindowCoords, isWindowOpen } from "./helpers";
+import { appSettings } from "../../core/config/variables";
 
 export const WindowsList: React.FC = () => {
   const data = [
@@ -17,21 +18,7 @@ export const WindowsList: React.FC = () => {
     },
   ];
   const [windows, dispatch] = useReducer(windowReducer, []);
-  const [lastCoords, setLastCoords] = useState<ICoords>({ x: 20, y: 15 });
-  const [openWindowsNumber, setOpenWindowsNumber] = useState(0);
-
-  /*  useEffect(() => {
-    /!*const fetchData = async () => {
-      const data = await fetchWindowData();
-      data.forEach((windowData: any) => {
-        const id = windowData.id;
-        dispatch({ type: 'NEW_WINDOW', id, x: windowData.x, y: windowData.y });
-        setNextId(Math.max(nextId, id + 1));
-        setLastCoords({ x: windowData.x + 100, y: windowData.y + 100 });
-      });
-    };
-    fetchData();*!/
-  }, []);*/
+  const [lastCoords, setLastCoords] = useState(appSettings.initialCoords);
 
   const handleOpenWindow = (id: number) => {
     const windowData = data.find((window) => window.id === id);
@@ -40,20 +27,33 @@ export const WindowsList: React.FC = () => {
     }
     const isWindowAlreadyOpen = isWindowOpen(windows, id);
     if (!isWindowAlreadyOpen) {
-      const { x, y } = getWindowCoords(lastCoords, 300, 200);
-      setLastCoords({ x: x + 20, y: y + 20 });
+      let x: number, y: number;
+      const isAnyWindowOnTheField = windows.some((window) => !window.minimized);
+      if (!isAnyWindowOnTheField) {
+        x = appSettings.initialCoords.x;
+        y = appSettings.initialCoords.y;
+        setLastCoords({ x, y });
+      } else {
+        ({ x, y } = getWindowCoords(300, 200, lastCoords));
+        if (!x || !y) {
+          throw new Error(`There is an error with coordinates`);
+        }
+        setLastCoords({
+          x: x + appSettings.cascadeStep,
+          y: y + appSettings.cascadeStep,
+        });
+      }
       const newWindow: IWindow = {
-        x,
-        y,
+        ...windowData,
+        x: x,
+        y: y,
         minimized: false,
         maximized: false,
         onClose: handleCloseWindow,
         onMinimize: handleMinimizeWindow,
         onMaximize: handleMaximizeWindow,
-        ...windowData,
       };
       dispatch({ type: "OPEN_WINDOW", window: newWindow });
-      setOpenWindowsNumber(openWindowsNumber + 1);
     }
   };
 
@@ -69,22 +69,77 @@ export const WindowsList: React.FC = () => {
     dispatch({ type: "MAXIMIZE_WINDOW", id });
   };
 
+  useEffect(() => {
+    const windowsContainer = document.getElementById("windowsContainer");
+    const minimizedWindowsBar = document.getElementById("minimizedWindowsBar");
+    if (!windowsContainer || !minimizedWindowsBar) {
+      throw new Error(`This is an layout error`);
+    }
+    windows.forEach((window) => {
+      const windowElement = document.getElementById(`window-${window.id}`);
+
+      if (window.minimized) {
+        if (windowElement) {
+          minimizedWindowsBar.appendChild(windowElement);
+        }
+      } else {
+        if (windowElement) {
+          windowsContainer.appendChild(windowElement);
+        }
+      }
+    });
+
+    const handleWindowClick = (id: number) => {
+      dispatch({ type: "RESTORE_WINDOW", id });
+    };
+
+    const handleMinimizedWindowsBarClick = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      if (target && target.dataset.windowId) {
+        const id = parseInt(target.dataset.windowId);
+        dispatch({ type: "RESTORE_WINDOW", id });
+      }
+    };
+
+    windows.forEach((window) => {
+      const windowElement = document.getElementById(`window-${window.id}`);
+
+      if (windowElement) {
+        windowElement.addEventListener("click", () => {
+          handleWindowClick(window.id);
+        });
+      }
+    });
+
+    minimizedWindowsBar.addEventListener(
+      "click",
+      handleMinimizedWindowsBarClick
+    );
+
+    return () => {
+      minimizedWindowsBar.removeEventListener(
+        "click",
+        handleMinimizedWindowsBarClick
+      );
+    };
+  }, [windows]);
+
   return (
     <>
-      <div>
-        <button onClick={() => handleOpenWindow(1)}>1 Window</button>
-        <button onClick={() => handleOpenWindow(2)}>2 Window</button>
+      <button onClick={() => handleOpenWindow(1)}>1 Window</button>
+      <button onClick={() => handleOpenWindow(2)}>2 Window</button>
+      <div id="windowsContainer">
         {windows.map((window) => (
           <Window
             key={window.id}
             {...window}
-            buttons={["close", "minimize", "maximize"]}
             onClose={handleCloseWindow}
             onMinimize={handleMinimizeWindow}
             onMaximize={handleMaximizeWindow}
           />
         ))}
       </div>
+      <div id="minimizedWindowsBar"></div>
     </>
   );
 };

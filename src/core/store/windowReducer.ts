@@ -24,6 +24,10 @@ function windowReducer(state: IWindow[], action: IAction) {
           ? { ...window, minimized: false, maximized: true }
           : window
       );
+    case "RESTORE_WINDOW":
+      return state.map((window) =>
+        window.id === action.id ? { ...window, minimized: false } : window
+      );
     default:
       return state;
   }
