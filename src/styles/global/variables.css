@@ -1,15 +1,20 @@
 :root {
   /* Color schema */
 
-  --primary: #ffa400;
-  --secondary: #009ddc;
-  --white: #fffcf9;
-  --black: #1e1e20;
-
-  --grey-500: #494b4f;
+  --primary: #ece6c2;
+  --secondary: #73bda8;
+  --black: #222;
+  --white: #efefef;
+  --gray-100: #6f7376;
+  --gray-200: #7c7d81;
+  --gray-300: #858585;
+  --gray-400: #b6b6b6;
+  --gray-500: #bec2c5;
+  --gray-600: #c5c6ca;
+  --gray-700: #ecedf1;
 
   /* Fonts */
-  --main-font: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --main-font: monospace, sans-serif;
   --base-font-color: var(--black);
   --base-line-height: 1.2;
 }
