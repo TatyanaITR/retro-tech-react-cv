@@ -16,9 +16,14 @@ interface IActionMaximizeWindow {
   type: "MAXIMIZE_WINDOW";
   id: number;
 }
+interface IActionRestoreWindow {
+  type: "RESTORE_WINDOW";
+  id: number;
+}
 
 export type IAction =
   | IActionOpenWindow
   | IActionCloseWindow
   | IActionMinimizeWindow
-  | IActionMaximizeWindow;
+  | IActionMaximizeWindow
+  | IActionRestoreWindow;

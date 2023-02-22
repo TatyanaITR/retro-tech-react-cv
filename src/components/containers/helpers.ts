@@ -1,31 +1,26 @@
 import { IWindow } from "../simple/Window/Window";
-
-export interface ICoords {
-  x: number;
-  y: number;
-}
+import { appSettings } from "../../core/config/variables";
 
 export const getWindowCoords = (
-  lastCoords: ICoords,
   width: number,
-  height: number
-): ICoords => {
-  const cascadeStep = 20;
-  const boundaryOffset = 100;
+  height: number,
+  lastCoords: { x: number; y: number }
+): { x: number; y: number } => {
+  const { innerWidth, innerHeight } = window;
 
-  let { x, y } = lastCoords;
-
-  if (x + width > window.innerWidth) {
-    x = cascadeStep;
-    y += boundaryOffset;
+  if (
+    lastCoords.x + width > innerWidth ||
+    lastCoords.y + height > innerHeight
+  ) {
+    lastCoords = { x: 0, y: 0 };
   }
 
-  if (y + height > window.innerHeight) {
-    x = cascadeStep;
-    y = cascadeStep;
-  }
+  lastCoords = {
+    x: lastCoords.x + appSettings.cascadeStep,
+    y: lastCoords.y + appSettings.cascadeStep,
+  };
 
-  return { x, y };
+  return lastCoords;
 };
 
 export const isWindowOpen = (state: IWindow[], id: number): boolean => {

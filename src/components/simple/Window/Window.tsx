@@ -41,9 +41,9 @@ const Window: React.FC<IWindow> = ({
         break;
     }
   };
-
+  const windowId = `window-${id}`;
   return (
-    <div className={styles.window} style={{ left: x, top: y }}>
+    <div className={styles.window} id={windowId} style={{ left: x, top: y }}>
       <div className="title-bar">
         <div className="title">{header}</div>
         <div className="buttons">
