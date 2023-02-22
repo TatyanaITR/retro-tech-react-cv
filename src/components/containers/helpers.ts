@@ -1,15 +1,29 @@
 import { IWindow } from "../simple/Window/Window";
 
-interface ICoords {
+export interface ICoords {
   x: number;
   y: number;
 }
 
-export const getWindowCoords = (width: number, height: number): ICoords => {
-  const w = window.innerWidth;
-  const h = window.innerHeight;
-  let x = 3;
-  let y = 15;
+export const getWindowCoords = (
+  lastCoords: ICoords,
+  width: number,
+  height: number
+): ICoords => {
+  const cascadeStep = 20;
+  const boundaryOffset = 100;
+
+  let { x, y } = lastCoords;
+
+  if (x + width > window.innerWidth) {
+    x = cascadeStep;
+    y += boundaryOffset;
+  }
+
+  if (y + height > window.innerHeight) {
+    x = cascadeStep;
+    y = cascadeStep;
+  }
 
   return { x, y };
 };

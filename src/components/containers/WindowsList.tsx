@@ -1,9 +1,9 @@
 import React, { useEffect, useReducer, useState } from "react";
 import Window, { IWindow } from "../simple/Window/Window";
 import windowReducer from "../../core/store/windowReducer";
-import { getWindowCoords, isWindowOpen } from "./helpers";
+import { getWindowCoords, ICoords, isWindowOpen } from "./helpers";
 
-export const WindowsList: React.FC<{}> = (props) => {
+export const WindowsList: React.FC = () => {
   const data = [
     {
       id: 1,
@@ -17,6 +17,7 @@ export const WindowsList: React.FC<{}> = (props) => {
     },
   ];
   const [windows, dispatch] = useReducer(windowReducer, []);
+  const [lastCoords, setLastCoords] = useState<ICoords>({ x: 20, y: 15 });
   const [openWindowsNumber, setOpenWindowsNumber] = useState(0);
 
   /*  useEffect(() => {
@@ -39,7 +40,8 @@ export const WindowsList: React.FC<{}> = (props) => {
     }
     const isWindowAlreadyOpen = isWindowOpen(windows, id);
     if (!isWindowAlreadyOpen) {
-      const { x, y } = getWindowCoords(450, 250);
+      const { x, y } = getWindowCoords(lastCoords, 300, 200);
+      setLastCoords({ x: x + 20, y: y + 20 });
       const newWindow: IWindow = {
         x,
         y,
