@@ -1,6 +1,7 @@
 import React, { useEffect, useReducer, useState } from "react";
 import Window, { IWindow } from "../simple/Window/Window";
 import windowReducer from "../../core/store/windowReducer";
+import { getWindowCoords, isWindowOpen } from "./helpers";
 
 export const WindowsList: React.FC<{}> = (props) => {
   const data = [
@@ -17,7 +18,6 @@ export const WindowsList: React.FC<{}> = (props) => {
   ];
   const [windows, dispatch] = useReducer(windowReducer, []);
   const [openWindowsNumber, setOpenWindowsNumber] = useState(0);
-  const [lastCoords, setLastCoords] = useState({ x: 0, y: 0 });
 
   /*  useEffect(() => {
     /!*const fetchData = async () => {
@@ -33,24 +33,26 @@ export const WindowsList: React.FC<{}> = (props) => {
   }, []);*/
 
   const handleOpenWindow = (id: number) => {
-    const initCoords = { x: 20, y: 10 };
-    const { x, y } = lastCoords;
     const windowData = data.find((window) => window.id === id);
     if (!windowData) {
       throw new Error(`Window data not found for id ${id}`);
     }
-    const newWindow: IWindow = {
-      x,
-      y,
-      minimized: false,
-      maximized: false,
-      onClose: handleCloseWindow,
-      onMinimize: handleMinimizeWindow,
-      onMaximize: handleMaximizeWindow,
-      ...windowData,
-    };
-    dispatch({ type: "OPEN_WINDOW", window: newWindow });
-    setOpenWindowsNumber(openWindowsNumber + 1);
+    const isWindowAlreadyOpen = isWindowOpen(windows, id);
+    if (!isWindowAlreadyOpen) {
+      const { x, y } = getWindowCoords(450, 250);
+      const newWindow: IWindow = {
+        x,
+        y,
+        minimized: false,
+        maximized: false,
+        onClose: handleCloseWindow,
+        onMinimize: handleMinimizeWindow,
+        onMaximize: handleMaximizeWindow,
+        ...windowData,
+      };
+      dispatch({ type: "OPEN_WINDOW", window: newWindow });
+      setOpenWindowsNumber(openWindowsNumber + 1);
+    }
   };
 
   const handleCloseWindow = (id: number) => {
