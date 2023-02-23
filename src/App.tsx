@@ -1,7 +1,7 @@
-import { WindowsList } from "./components/containers/WindowsList";
+import { WindowsList } from "./components/containers/WindowList/WindowsList";
 
 const App = () => {
-    return <WindowsList />;
+  return <WindowsList />;
 };
 
 export default App;

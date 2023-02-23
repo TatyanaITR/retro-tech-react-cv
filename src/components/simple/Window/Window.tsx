@@ -41,12 +41,23 @@ const Window: React.FC<IWindow> = ({
         break;
     }
   };
-  const windowId = `window-${id}`;
+  const windowId: string = `window-${id}`;
+  const isMinimizedClass: string = minimized
+    ? ` ${styles["window-minimized"]}`
+    : "";
   return (
-    <div className={styles.window} id={windowId} style={{ left: x, top: y }}>
-      <div className="title-bar">
-        <div className="title">{header}</div>
-        <div className="buttons">
+    <div
+      className={`${styles.window}${isMinimizedClass}`}
+      id={windowId}
+      style={{
+        width: "300px",
+        height: "200px",
+        ...(!minimized ? { left: x, top: y } : {}),
+      }}
+    >
+      <div className={styles.headerWrapper}>
+        <div className={styles.headerText}>{header}</div>
+        <div className={styles.windowControls}>
           {buttons.includes("close") && (
             <button onClick={() => handleButtonClick("close")}>X</button>
           )}
@@ -58,7 +69,9 @@ const Window: React.FC<IWindow> = ({
           )}
         </div>
       </div>
-      <div className="content">This is the content of window {id}.</div>
+      <div className={styles.windowContent}>
+        This is the content of window {id}.
+      </div>
     </div>
   );
 };

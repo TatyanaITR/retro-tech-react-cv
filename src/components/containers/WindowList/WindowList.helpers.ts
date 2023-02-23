@@ -1,5 +1,5 @@
-import { IWindow } from "../simple/Window/Window";
-import { appSettings } from "../../core/config/variables";
+import { IWindow } from "../../simple/Window/Window";
+import { appSettings } from "../../../core/config/variables";
 
 export const getWindowCoords = (
   width: number,

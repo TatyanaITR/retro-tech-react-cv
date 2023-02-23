@@ -1,8 +1,10 @@
 import React, { useEffect, useReducer, useState } from "react";
-import Window, { IWindow } from "../simple/Window/Window";
-import windowReducer from "../../core/store/windowReducer";
-import { getWindowCoords, isWindowOpen } from "./helpers";
-import { appSettings } from "../../core/config/variables";
+import Window, { IWindow } from "../../simple/Window/Window";
+import windowReducer from "../../../core/store/windowReducer";
+import { getWindowCoords, isWindowOpen } from "./WindowList.helpers";
+import { appSettings } from "../../../core/config/variables";
+import styles from "./WindowList.module.css";
+import { logDOM } from "@storybook/testing-library";
 
 export const WindowsList: React.FC = () => {
   const data = [
@@ -128,7 +130,7 @@ export const WindowsList: React.FC = () => {
     <>
       <button onClick={() => handleOpenWindow(1)}>1 Window</button>
       <button onClick={() => handleOpenWindow(2)}>2 Window</button>
-      <div id="windowsContainer">
+      <div id="windowsContainer" className={styles.windowsContainer}>
         {windows.map((window) => (
           <Window
             key={window.id}
@@ -139,7 +141,10 @@ export const WindowsList: React.FC = () => {
           />
         ))}
       </div>
-      <div id="minimizedWindowsBar"></div>
+      <div
+        id="minimizedWindowsBar"
+        className={styles.minimizedWindowsBar}
+      ></div>
     </>
   );
 };
