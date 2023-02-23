@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./Window.module.css";
+import DraggableElement from "../../containers/DraggableElement/DraggableElement";
 
 export interface IWindow {
   id: number;
@@ -46,9 +47,10 @@ const Window: React.FC<IWindow> = ({
     ? ` ${styles["window-minimized"]}`
     : "";
   return (
-    <div
+    <DraggableElement
       className={`${styles.window}${isMinimizedClass}`}
       id={windowId}
+      handleSelector={`.${styles.headerWrapper}`}
       style={{
         width: "300px",
         height: "200px",
@@ -72,7 +74,7 @@ const Window: React.FC<IWindow> = ({
       <div className={styles.windowContent}>
         This is the content of window {id}.
       </div>
-    </div>
+    </DraggableElement>
   );
 };
 
