@@ -1,13 +1,18 @@
-import React, { useEffect, useReducer, useState } from "react";
-import Window, { IWindow } from "../../simple/Window/Window";
-import windowReducer from "../../../core/store/windowReducer";
-import { getWindowCoords, isWindowOpen } from "./WindowList.helpers";
+import React, { Reducer, useReducer, useState } from "react";
+import Window from "../../simple/Window/Window";
+import MinimizedWindow from "../../simple/MinimizedWindow/MinimizedWindow";
+import windowReducer, {
+  initialState,
+  IState,
+} from "../../../core/store/windowReducer";
+import { IAction } from "../../../core/store/windowReducer.types";
 import { appSettings } from "../../../core/config/variables";
 import styles from "./WindowList.module.css";
-import { logDOM } from "@storybook/testing-library";
+import { WindowsData } from "./WindowList.types";
+import { createNewWindow, isWindowOpen } from "./WindowList.helpers";
 
 export const WindowsList: React.FC = () => {
-  const data = [
+  const data: WindowsData = [
     {
       id: 1,
       header: "header 1",
@@ -19,42 +24,25 @@ export const WindowsList: React.FC = () => {
       buttons: ["close", "minimize"],
     },
   ];
-  const [windows, dispatch] = useReducer(windowReducer, []);
+  const [store, dispatch] = useReducer<Reducer<IState, IAction>>(
+    windowReducer,
+    initialState
+  );
   const [lastCoords, setLastCoords] = useState(appSettings.initialCoords);
 
   const handleOpenWindow = (id: number) => {
-    const windowData = data.find((window) => window.id === id);
-    if (!windowData) {
-      throw new Error(`Window data not found for id ${id}`);
-    }
-    const isWindowAlreadyOpen = isWindowOpen(windows, id);
+    const isWindowAlreadyOpen = isWindowOpen(store, id);
+    const isNotFirstWindow: boolean = !!store.windows.length;
     if (!isWindowAlreadyOpen) {
-      let x: number, y: number;
-      const isAnyWindowOnTheField = windows.some((window) => !window.minimized);
-      if (!isAnyWindowOnTheField) {
-        x = appSettings.initialCoords.x;
-        y = appSettings.initialCoords.y;
-        setLastCoords({ x, y });
-      } else {
-        ({ x, y } = getWindowCoords(300, 200, lastCoords));
-        if (!x || !y) {
-          throw new Error(`There is an error with coordinates`);
-        }
-        setLastCoords({
-          x: x + appSettings.cascadeStep,
-          y: y + appSettings.cascadeStep,
-        });
-      }
-      const newWindow: IWindow = {
-        ...windowData,
-        x: x,
-        y: y,
-        minimized: false,
-        maximized: false,
-        onClose: handleCloseWindow,
-        onMinimize: handleMinimizeWindow,
-        onMaximize: handleMaximizeWindow,
-      };
+      let newWindow = createNewWindow(
+        data,
+        id,
+        lastCoords,
+        isNotFirstWindow,
+        handleCloseWindow,
+        handleMinimizeWindow
+      );
+      setLastCoords(newWindow.coords)
       dispatch({ type: "OPEN_WINDOW", window: newWindow });
     }
   };
@@ -67,84 +55,45 @@ export const WindowsList: React.FC = () => {
     dispatch({ type: "MINIMIZE_WINDOW", id });
   };
 
-  const handleMaximizeWindow = (id: number) => {
-    dispatch({ type: "MAXIMIZE_WINDOW", id });
-  };
-
-  useEffect(() => {
-    const windowsContainer = document.getElementById("windowsContainer");
-    const minimizedWindowsBar = document.getElementById("minimizedWindowsBar");
-    if (!windowsContainer || !minimizedWindowsBar) {
-      throw new Error(`This is an layout error`);
-    }
-    windows.forEach((window) => {
-      const windowElement = document.getElementById(`window-${window.id}`);
-
-      if (window.minimized) {
-        if (windowElement) {
-          minimizedWindowsBar.appendChild(windowElement);
-        }
-      } else {
-        if (windowElement) {
-          windowsContainer.appendChild(windowElement);
-        }
-      }
-    });
-
-    const handleWindowClick = (id: number) => {
-      dispatch({ type: "RESTORE_WINDOW", id });
-    };
-
-    const handleMinimizedWindowsBarClick = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (target && target.dataset.windowId) {
-        const id = parseInt(target.dataset.windowId);
-        dispatch({ type: "RESTORE_WINDOW", id });
-      }
-    };
-
-    windows.forEach((window) => {
-      const windowElement = document.getElementById(`window-${window.id}`);
-
-      if (windowElement) {
-        windowElement.addEventListener("click", () => {
-          handleWindowClick(window.id);
-        });
-      }
-    });
-
-    minimizedWindowsBar.addEventListener(
-      "click",
-      handleMinimizedWindowsBarClick
+  const handleRestoreWindow = (id: number) => {
+    dispatch({ type: "CLOSE_WINDOW", id });
+    const isNotFirstWindow: boolean = !!store.windows.length;
+    let newWindow = createNewWindow(
+      data,
+      id,
+      lastCoords,
+      isNotFirstWindow,
+      handleCloseWindow,
+      handleMinimizeWindow
     );
-
-    return () => {
-      minimizedWindowsBar.removeEventListener(
-        "click",
-        handleMinimizedWindowsBarClick
-      );
-    };
-  }, [windows]);
+    setLastCoords(newWindow.coords)
+    dispatch({ type: "OPEN_WINDOW", window: newWindow });
+  };
 
   return (
     <>
       <button onClick={() => handleOpenWindow(1)}>1 Window</button>
       <button onClick={() => handleOpenWindow(2)}>2 Window</button>
       <div id="windowsContainer" className={styles.windowsContainer}>
-        {windows.map((window) => (
+        {store.windows.map((window) => (
           <Window
             key={window.id}
             {...window}
             onClose={handleCloseWindow}
             onMinimize={handleMinimizeWindow}
-            onMaximize={handleMaximizeWindow}
           />
         ))}
       </div>
-      <div
-        id="minimizedWindowsBar"
-        className={styles.minimizedWindowsBar}
-      ></div>
+      <div id="minimizedWindowsBar" className={styles.minimizedWindowsBar}>
+        {store.minimizedWindows.map((window) => (
+          <MinimizedWindow
+            key={window.id}
+            {...window}
+            onClose={handleCloseWindow}
+            onRestore={handleRestoreWindow}
+          />
+        ))}
+      </div>
     </>
   );
 };

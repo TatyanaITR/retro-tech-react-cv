@@ -1,31 +1,26 @@
 import React from "react";
 import styles from "./Window.module.css";
 import DraggableElement from "../../containers/DraggableElement/DraggableElement";
+import { Coords, Size } from "../../../core/types/commonTypes";
 
 export interface IWindow {
   id: number;
-  x: number;
-  y: number;
+  coords: Coords;
+  size?: Size;
   header: string;
   buttons: string[];
   onClose: (id: number) => void;
   onMinimize: (id: number) => void;
-  onMaximize: (id: number) => void;
-  minimized?: boolean;
-  maximized?: boolean;
 }
 
 const Window: React.FC<IWindow> = ({
   id,
-  x,
-  y,
+  coords,
+  size = { w: 400, h: 300 },
   header,
   buttons,
   onClose,
   onMinimize,
-  onMaximize,
-  minimized = false,
-  maximized = false,
 }: IWindow) => {
   const handleButtonClick = (button: string) => {
     switch (button) {
@@ -35,26 +30,21 @@ const Window: React.FC<IWindow> = ({
       case "minimize":
         onMinimize(id);
         break;
-      case "maximize":
-        onMaximize(id);
-        break;
       default:
         break;
     }
   };
   const windowId: string = `window-${id}`;
-  const isMinimizedClass: string = minimized
-    ? ` ${styles["window-minimized"]}`
-    : "";
   return (
     <DraggableElement
-      className={`${styles.window}${isMinimizedClass}`}
+      className={`${styles.window}`}
       id={windowId}
       handleSelector={`.${styles.headerWrapper}`}
       style={{
-        width: "300px",
-        height: "200px",
-        ...(!minimized ? { left: x, top: y } : {}),
+        width: size.w,
+        height: size.h,
+        left: coords.x,
+        top: coords.y,
       }}
     >
       <div className={styles.headerWrapper}>
@@ -65,9 +55,6 @@ const Window: React.FC<IWindow> = ({
           )}
           {buttons.includes("minimize") && (
             <button onClick={() => handleButtonClick("minimize")}>-</button>
-          )}
-          {buttons.includes("maximize") && (
-            <button onClick={() => handleButtonClick("maximize")}>+</button>
           )}
         </div>
       </div>
