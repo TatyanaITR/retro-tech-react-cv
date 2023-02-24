@@ -14,8 +14,8 @@
   --header-bg: var(--gray-200);
   --content-border-color: var(--gray-200);
   --header-border-color: var(--content-border-color);
-
   --header-color: var(--white);
+
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -23,6 +23,9 @@
   box-shadow: var(--window-box-shadow);
   overflow: hidden;
   resize: both;
+  &.window-active {
+    --header-wrapper-bg: var(--black);
+  }
 }
 .headerWrapper {
   background: var(--header-wrapper-bg);
@@ -52,13 +55,4 @@
 .windowContent {
   border: 1px solid var(--content-border-color);
   flex-grow: 1;
-}
-.window-minimized {
-  position: relative;
-  max-width: 120px;
-  cursor: pointer;
-  .windowContent,
-  .windowControls {
-    display: none;
-  }
 }

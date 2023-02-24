@@ -1,4 +1,5 @@
 import React from "react";
+import cn from "classnames";
 import styles from "./Window.module.css";
 import DraggableElement from "../../containers/DraggableElement/DraggableElement";
 import { Coords, Size } from "../../../core/types/commonTypes";
@@ -8,9 +9,13 @@ export interface IWindow {
   coords: Coords;
   size?: Size;
   header: string;
+  content: React.ReactNode;
+  type?: "default" | "feedback" | "navigation";
   buttons: string[];
+  isActive?: boolean;
   onClose: (id: number) => void;
   onMinimize: (id: number) => void;
+  onMouseDown: (id: number) => void;
 }
 
 const Window: React.FC<IWindow> = ({
@@ -18,9 +23,13 @@ const Window: React.FC<IWindow> = ({
   coords,
   size = { w: 400, h: 300 },
   header,
+  content,
+  type = "default",
   buttons,
+  isActive = false,
   onClose,
   onMinimize,
+  onMouseDown,
 }: IWindow) => {
   const handleButtonClick = (button: string) => {
     switch (button) {
@@ -35,9 +44,12 @@ const Window: React.FC<IWindow> = ({
     }
   };
   const windowId: string = `window-${id}`;
+  const windowCls = cn(styles.window, {
+    [styles["window-active"]]: isActive,
+  });
   return (
     <DraggableElement
-      className={`${styles.window}`}
+      className={windowCls}
       id={windowId}
       handleSelector={`.${styles.headerWrapper}`}
       style={{
@@ -47,19 +59,19 @@ const Window: React.FC<IWindow> = ({
         top: coords.y,
       }}
     >
-      <div className={styles.headerWrapper}>
-        <div className={styles.headerText}>{header}</div>
-        <div className={styles.windowControls}>
-          {buttons.includes("close") && (
-            <button onClick={() => handleButtonClick("close")}>X</button>
-          )}
-          {buttons.includes("minimize") && (
-            <button onClick={() => handleButtonClick("minimize")}>-</button>
-          )}
+      <div onMouseDown={() => onMouseDown(id)}>
+        <div className={styles.headerWrapper}>
+          <div className={styles.headerText}>{header}</div>
+          <div className={styles.windowControls}>
+            {buttons.includes("close") && (
+              <button onClick={() => handleButtonClick("close")}>X</button>
+            )}
+            {buttons.includes("minimize") && (
+              <button onClick={() => handleButtonClick("minimize")}>-</button>
+            )}
+          </div>
         </div>
-      </div>
-      <div className={styles.windowContent}>
-        This is the content of window {id}.
+        <div className={styles.windowContent}>{content}</div>
       </div>
     </DraggableElement>
   );

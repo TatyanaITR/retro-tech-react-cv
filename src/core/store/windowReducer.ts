@@ -18,9 +18,15 @@ export const initialState: IState = {
 function windowReducer(state: IState, action: IAction): IState {
   switch (action.type) {
     case "OPEN_WINDOW":
+      const inactiveWindows = state.windows.map((window) => {
+        return {
+          ...window,
+          isActive: false,
+        };
+      });
       return {
         ...state,
-        windows: [...state.windows, action.window],
+        windows: [...inactiveWindows, { ...action.window, isActive: true }],
       };
     case "CLOSE_WINDOW":
       return {
@@ -45,20 +51,14 @@ function windowReducer(state: IState, action: IAction): IState {
         };
       }
       return state;
-    /*case "RESTORE_WINDOW":
-      const windowToRestore = state.minimizedWindows.find(
-        (window) => window.id === action.id
-      );
-      if (windowToRestore) {
-        return {
-          ...state,
-          minimizedWindows: state.minimizedWindows.filter(
-            (window) => window.id !== action.id
-          ),
-          windows: [...state.windows, { ...windowToRestore, minimized: false }],
-        };
-      }
-      return state;*/
+    case "ACTIVATE_WINDOW":
+      return {
+        ...state,
+        windows: state.windows.map((window) => ({
+          ...window,
+          isActive: window.id === action.id,
+        })),
+      };
     default:
       return state;
   }

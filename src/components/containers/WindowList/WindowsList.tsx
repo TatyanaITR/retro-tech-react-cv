@@ -17,11 +17,13 @@ export const WindowsList: React.FC = () => {
       id: 1,
       header: "header 1",
       buttons: ["close"],
+      content: "content 1",
     },
     {
       id: 2,
       header: "header 2",
       buttons: ["close", "minimize"],
+      content: "content 2",
     },
   ];
   const [store, dispatch] = useReducer<Reducer<IState, IAction>>(
@@ -40,9 +42,10 @@ export const WindowsList: React.FC = () => {
         lastCoords,
         isNotFirstWindow,
         handleCloseWindow,
-        handleMinimizeWindow
+        handleMinimizeWindow,
+        handleMouseDownWindow
       );
-      setLastCoords(newWindow.coords)
+      setLastCoords(newWindow.coords);
       dispatch({ type: "OPEN_WINDOW", window: newWindow });
     }
   };
@@ -54,7 +57,9 @@ export const WindowsList: React.FC = () => {
   const handleMinimizeWindow = (id: number) => {
     dispatch({ type: "MINIMIZE_WINDOW", id });
   };
-
+  const handleMouseDownWindow = (id: number) => {
+    dispatch({ type: "ACTIVATE_WINDOW", id: id });
+  };
   const handleRestoreWindow = (id: number) => {
     dispatch({ type: "CLOSE_WINDOW", id });
     const isNotFirstWindow: boolean = !!store.windows.length;
@@ -64,9 +69,10 @@ export const WindowsList: React.FC = () => {
       lastCoords,
       isNotFirstWindow,
       handleCloseWindow,
-      handleMinimizeWindow
+      handleMinimizeWindow,
+      handleMouseDownWindow
     );
-    setLastCoords(newWindow.coords)
+    setLastCoords(newWindow.coords);
     dispatch({ type: "OPEN_WINDOW", window: newWindow });
   };
 
@@ -81,6 +87,7 @@ export const WindowsList: React.FC = () => {
             {...window}
             onClose={handleCloseWindow}
             onMinimize={handleMinimizeWindow}
+            onMouseDown={handleMouseDownWindow}
           />
         ))}
       </div>

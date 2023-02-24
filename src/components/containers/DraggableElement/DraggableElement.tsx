@@ -1,6 +1,6 @@
 import React, { CSSProperties } from "react";
 import { useDragger } from "../../../core/hooks/useDragger";
-type DraggableElementProps = {
+export type DraggableElementProps = {
   id: string;
   className?: string;
   handleSelector: string;
@@ -18,8 +18,7 @@ function DraggableElement({
   useDragger(id, handleSelector);
   return (
     <div id={id} className={className} style={style}>
-      {" "}
-      {children}{" "}
+      {children}
     </div>
   );
 }

@@ -14,10 +14,16 @@ interface IActionMinimizeWindow {
   id: number;
 }
 
+interface IActionActivateWindow {
+  type: "ACTIVATE_WINDOW";
+  id: number;
+}
+
 export type IAction =
   | IActionOpenWindow
   | IActionCloseWindow
-  | IActionMinimizeWindow;
+  | IActionMinimizeWindow
+  | IActionActivateWindow;
 
 export function windowToMinimizedWindow(window: IWindow): IMinimizedWindow {
   return {

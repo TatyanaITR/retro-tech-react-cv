@@ -62,7 +62,8 @@ export const createNewWindow = (
   lastCoords: Coords,
   isNotFirstWindow: boolean,
   handleCloseWindow: (id: number) => void,
-  handleMinimizeWindow: (id: number) => void
+  handleMinimizeWindow: (id: number) => void,
+  handleMouseDownWindow: (id: number) => void
 ) => {
   const windowContent = getWindowData(data, id);
   let coords: Coords = getWindowCoords(
@@ -76,6 +77,7 @@ export const createNewWindow = (
     coords,
     onClose: handleCloseWindow,
     onMinimize: handleMinimizeWindow,
+    onMouseDown: handleMouseDownWindow,
   };
   return newWindow;
 };
