@@ -24,7 +24,7 @@ const calcWindowCoords = (
 
   return lastCoords;
 };
-export const getWindowCoords = (
+const getWindowCoords = (
   isNotFirstWindow: boolean,
   windowWidth: number,
   windowHeight: number,
@@ -42,10 +42,7 @@ export const getWindowCoords = (
   return coords;
 };
 
-export const getWindowData = (
-  data: WindowsData,
-  id: number
-): WindowsDataElement => {
+const getWindowData = (data: WindowsData, id: number): WindowsDataElement => {
   const windowData = data.find((window) => window.id === id);
   if (!windowData) {
     throw new Error(`Window data not found for id ${id}`);

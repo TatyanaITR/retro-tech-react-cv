@@ -3,7 +3,7 @@ import styles from "./MinimizedWindow.module.css";
 import { IWindow } from "../Window/Window";
 
 export interface IMinimizedWindow
-  extends Pick<IWindow, "id" | "header" | "onClose"> {
+  extends Pick<IWindow, "id" | "header" | "onClose" > {
   onRestore: (id: number) => void;
 }
 

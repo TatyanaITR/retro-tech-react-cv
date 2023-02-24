@@ -2,13 +2,9 @@ import { IMinimizedWindow } from "./MinimizedWindow";
 
 const window: IMinimizedWindow = {
   id: 1,
-  x: 100,
-  y: 100,
   header: "This header",
-  buttons: ["close", "maximize", "minimize"],
+  onRestore: () => console.log("Restore window"),
   onClose: () => console.log("Closing window"),
-  onMinimize: () => console.log("Minimizing window"),
-  onMaximize: () => console.log("Maximizing window"),
 };
 
 export const mockMinimizedWindowProps = {
