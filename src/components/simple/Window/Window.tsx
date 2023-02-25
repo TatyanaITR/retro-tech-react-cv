@@ -3,14 +3,15 @@ import cn from "classnames";
 import styles from "./Window.module.css";
 import DraggableElement from "../../containers/DraggableElement/DraggableElement";
 import { Coords, Size } from "../../../core/types/commonTypes";
+import { Content } from "../../containers/Desktop/Desktop.types";
 
 export interface IWindow {
   id: number;
   coords: Coords;
   size?: Size;
   header: string;
-  content: React.ReactNode;
-  type?: "default" | "feedback" | "navigation";
+  content: Content[] | [];
+  type?: string;
   buttons: string[];
   isActive?: boolean;
   onClose: (id: number) => void;
@@ -71,7 +72,7 @@ const Window: React.FC<IWindow> = ({
             )}
           </div>
         </div>
-        <div className={styles.windowContent}>{content}</div>
+        <div className={styles.windowContent}>{/*{content}*/}</div>
       </div>
     </DraggableElement>
   );

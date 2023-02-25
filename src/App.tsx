@@ -1,4 +1,4 @@
-import { WindowsList } from "./components/containers/WindowList/WindowsList";
+import { Desktop } from "./components/containers/Desktop/Desktop";
 import { ToastContainer } from "react-toastify";
 import FeedbackForm from "./components/simple/FeedbackForm/FeedbackForm";
 import React from "react";
@@ -16,7 +16,7 @@ const App = () => {
         draggable
         pauseOnHover
       />
-      {/* <WindowsList />*/}
+      <Desktop />
     </>
   );
 };
