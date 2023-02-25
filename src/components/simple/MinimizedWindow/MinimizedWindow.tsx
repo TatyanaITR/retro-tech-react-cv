@@ -3,8 +3,8 @@ import styles from "./MinimizedWindow.module.css";
 import { IWindow } from "../Window/Window";
 
 export interface IMinimizedWindow
-  extends Pick<IWindow, "id" | "header" | "onClose" > {
-  onRestore: (id: number) => void;
+  extends Pick<IWindow, "id" | "header" | "onClose"> {
+  onRestore: (id: string) => void;
 }
 
 const MinimizedWindow: React.FC<IMinimizedWindow> = ({

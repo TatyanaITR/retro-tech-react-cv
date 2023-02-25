@@ -13,7 +13,7 @@ interface ContentJobsListItem {
 export type Content = ContentDefault | ContentJobsListItem;
 
 export type WindowsDataElement = {
-  id: number;
+  id: string;
   header: string;
   buttons: string[];
   size?: Size;

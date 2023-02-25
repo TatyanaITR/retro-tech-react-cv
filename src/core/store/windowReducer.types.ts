@@ -7,16 +7,16 @@ interface IActionOpenWindow {
 }
 interface IActionCloseWindow {
   type: "CLOSE_WINDOW";
-  id: number;
+  id: string;
 }
 interface IActionMinimizeWindow {
   type: "MINIMIZE_WINDOW";
-  id: number;
+  id: string;
 }
 
 interface IActionActivateWindow {
   type: "ACTIVATE_WINDOW";
-  id: number;
+  id: string;
 }
 
 export type IAction =

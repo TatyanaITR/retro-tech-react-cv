@@ -1,6 +1,5 @@
 import { Desktop } from "./components/containers/Desktop/Desktop";
 import { ToastContainer } from "react-toastify";
-import FeedbackForm from "./components/simple/FeedbackForm/FeedbackForm";
 import React from "react";
 import "react-toastify/dist/ReactToastify.css";
 const App = () => {

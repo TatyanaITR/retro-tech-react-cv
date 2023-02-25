@@ -1,7 +1,7 @@
 import { IWindow } from "./Window";
 
 const window: IWindow = {
-  id: 1,
+  id: "1",
   coords: { x: 15, y: 20 },
   header: "This header",
   content: [],

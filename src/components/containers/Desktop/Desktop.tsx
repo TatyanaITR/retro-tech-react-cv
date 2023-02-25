@@ -1,4 +1,4 @@
-import React, { Reducer, useReducer, useState } from "react";
+import React, { Reducer, useEffect, useReducer, useState } from "react";
 import Window from "../../simple/Window/Window";
 import MinimizedWindow from "../../simple/MinimizedWindow/MinimizedWindow";
 import windowReducer, {
@@ -10,9 +10,20 @@ import { appSettings } from "../../../core/config/variables";
 import styles from "./Desktop.module.css";
 import { WindowsData } from "./Desktop.types";
 import { createNewWindow, isWindowOpen } from "./Desktop.helpers";
+import { fetchData } from "../../../core/utils/hygraph.utils";
 
 export const Desktop: React.FC = () => {
-  const data: WindowsData = [
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    fetchData()
+      .then((data) => {
+        setData(data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+  /*const data: WindowsData = [
     {
       id: 1,
       header: "header 1",
@@ -33,14 +44,14 @@ export const Desktop: React.FC = () => {
       type: "feedback",
       content: [],
     },
-  ];
+  ];*/
   const [store, dispatch] = useReducer<Reducer<IState, IAction>>(
     windowReducer,
     initialState
   );
   const [lastCoords, setLastCoords] = useState(appSettings.initialCoords);
 
-  const handleOpenWindow = (id: number) => {
+  const handleOpenWindow = (id: string) => {
     const isWindowAlreadyOpen = isWindowOpen(store, id);
     const isNotFirstWindow: boolean = !!store.windows.length;
     if (!isWindowAlreadyOpen) {
@@ -58,17 +69,17 @@ export const Desktop: React.FC = () => {
     }
   };
 
-  const handleCloseWindow = (id: number) => {
+  const handleCloseWindow = (id: string) => {
     dispatch({ type: "CLOSE_WINDOW", id });
   };
 
-  const handleMinimizeWindow = (id: number) => {
+  const handleMinimizeWindow = (id: string) => {
     dispatch({ type: "MINIMIZE_WINDOW", id });
   };
-  const handleMouseDownWindow = (id: number) => {
+  const handleMouseDownWindow = (id: string) => {
     dispatch({ type: "ACTIVATE_WINDOW", id: id });
   };
-  const handleRestoreWindow = (id: number) => {
+  const handleRestoreWindow = (id: string) => {
     dispatch({ type: "CLOSE_WINDOW", id });
     const isNotFirstWindow: boolean = !!store.windows.length;
     let newWindow = createNewWindow(
@@ -86,8 +97,10 @@ export const Desktop: React.FC = () => {
 
   return (
     <>
-      <button onClick={() => handleOpenWindow(1)}>1 Window</button>
-      <button onClick={() => handleOpenWindow(2)}>2 Window</button>
+      <button onClick={() => handleOpenWindow("cla8eqmt70b4o0cw1j3kbgrbm")}>
+        1 Window
+      </button>
+      <button onClick={() => handleOpenWindow("")}>2 Window</button>
       <div id="windowsContainer" className={styles.windowsContainer}>
         {store.windows.map((window) => (
           <Window

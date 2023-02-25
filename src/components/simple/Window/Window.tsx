@@ -6,7 +6,7 @@ import { Coords, Size } from "../../../core/types/commonTypes";
 import { Content } from "../../containers/Desktop/Desktop.types";
 
 export interface IWindow {
-  id: number;
+  id: string;
   coords: Coords;
   size?: Size;
   header: string;
@@ -14,9 +14,9 @@ export interface IWindow {
   type?: string;
   buttons: string[];
   isActive?: boolean;
-  onClose: (id: number) => void;
-  onMinimize: (id: number) => void;
-  onMouseDown: (id: number) => void;
+  onClose: (id: string) => void;
+  onMinimize: (id: string) => void;
+  onMouseDown: (id: string) => void;
 }
 
 const Window: React.FC<IWindow> = ({
