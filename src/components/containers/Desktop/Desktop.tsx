@@ -7,23 +7,31 @@ import windowReducer, {
 } from "../../../core/store/windowReducer";
 import { IAction } from "../../../core/store/windowReducer.types";
 import { appSettings } from "../../../core/config/variables";
-import styles from "./WindowList.module.css";
-import { WindowsData } from "./WindowList.types";
-import { createNewWindow, isWindowOpen } from "./WindowList.helpers";
+import styles from "./Desktop.module.css";
+import { WindowsData } from "./Desktop.types";
+import { createNewWindow, isWindowOpen } from "./Desktop.helpers";
 
-export const WindowsList: React.FC = () => {
+export const Desktop: React.FC = () => {
   const data: WindowsData = [
     {
       id: 1,
       header: "header 1",
       buttons: ["close"],
-      content: "content 1",
+      type: "default",
+      content: [
+        {
+          defaultcontent: {
+            html: "<p>Content AboutMe</p>",
+          },
+        },
+      ],
     },
     {
       id: 2,
       header: "header 2",
       buttons: ["close", "minimize"],
-      content: "content 2",
+      type: "feedback",
+      content: [],
     },
   ];
   const [store, dispatch] = useReducer<Reducer<IState, IAction>>(

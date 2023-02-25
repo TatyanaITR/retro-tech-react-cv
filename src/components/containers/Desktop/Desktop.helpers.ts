@@ -1,4 +1,4 @@
-import { WindowsData, WindowsDataElement } from "./WindowList.types";
+import { WindowsData, WindowsDataElement } from "./Desktop.types";
 import { IState } from "../../../core/store/windowReducer";
 import { appSettings } from "../../../core/config/variables";
 import { Coords } from "../../../core/types/commonTypes";
