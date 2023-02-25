@@ -1,12 +1,12 @@
 import { Size } from "../../../core/types/commonTypes";
 
-interface ContentDefault {
+export interface ContentDefault {
   defaultcontent: {
     html: string;
   };
 }
 
-interface ContentJobsListItem {
+export interface ContentJobsListItem {
   id: string;
   jobtitle: string;
 }

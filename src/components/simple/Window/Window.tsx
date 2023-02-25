@@ -4,6 +4,7 @@ import styles from "./Window.module.css";
 import DraggableElement from "../../containers/DraggableElement/DraggableElement";
 import { Coords, Size } from "../../../core/types/commonTypes";
 import { Content } from "../../containers/Desktop/Desktop.types";
+import { setWindowContentType } from "./Window.helpers";
 
 export interface IWindow {
   id: string;
@@ -44,6 +45,7 @@ const Window: React.FC<IWindow> = ({
         break;
     }
   };
+  const windowContent = setWindowContentType(type, content);
   const windowId: string = `window-${id}`;
   const windowCls = cn(styles.window, {
     [styles["window-active"]]: isActive,
@@ -72,7 +74,7 @@ const Window: React.FC<IWindow> = ({
             )}
           </div>
         </div>
-        <div className={styles.windowContent}>{/*{content}*/}</div>
+        <div className={styles.windowContent}>{windowContent}</div>
       </div>
     </DraggableElement>
   );
