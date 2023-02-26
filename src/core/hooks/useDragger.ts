@@ -33,6 +33,8 @@ export function useDragger(id: string, handleSelector?: string) {
       isClicked.current = true;
       coords.current.startX = e.clientX;
       coords.current.startY = e.clientY;
+      coords.current.lastX = target.offsetLeft;
+      coords.current.lastY = target.offsetTop;
       target.classList.add("noSelect");
     };
 
