@@ -10,6 +10,7 @@ import { appSettings } from "../../../core/config/variables";
 import styles from "./Desktop.module.css";
 import { createNewWindow, isWindowOpen } from "./Desktop.helpers";
 import { fetchData } from "../../../core/utils/hygraph.utils";
+import Icon from "../../simple/Icon/Icon";
 
 export const Desktop: React.FC = () => {
   const [data, setData] = useState([]);
@@ -74,13 +75,19 @@ export const Desktop: React.FC = () => {
 
   return (
     <>
-      <button onClick={() => handleOpenWindow("cla8eqmt70b4o0cw1j3kbgrbm")}>
-        1 Window
-      </button>
-      <button onClick={() => handleOpenWindow("cleki52d51f2t0bw1e8kp5riv")}>
-        2 Window
-      </button>
-      <div id="windowsContainer" className={styles.windowsContainer}>
+      <div className={styles.desktop} id="desktop">
+        <button onClick={() => handleOpenWindow("cla8eqmt70b4o0cw1j3kbgrbm")}>
+          1 Window
+        </button>
+        <button onClick={() => handleOpenWindow("cleki52d51f2t0bw1e8kp5riv")}>
+          2 Window
+        </button>
+        <Icon
+          size="md"
+          label="Тестовая иконка"
+          iconName="icon-doc"
+          onDoubleClick={() => handleOpenWindow("cla8eqmt70b4o0cw1j3kbgrbm")}
+        />
         {store.windows.map((window) => (
           <Window
             key={window.id}
