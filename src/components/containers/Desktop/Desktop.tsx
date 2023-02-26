@@ -8,12 +8,15 @@ import windowReducer, {
 import { IAction } from "../../../core/store/windowReducer.types";
 import { appSettings } from "../../../core/config/variables";
 import styles from "./Desktop.module.css";
-import { createNewWindow, isWindowOpen } from "./Desktop.helpers";
+import { createWindow, getWindowData, isWindowOpen } from "./Desktop.helpers";
 import { fetchData } from "../../../core/utils/hygraph.utils";
 import Icon from "../../simple/Icon/Icon";
+import { NavDataElement } from "../../simple/Navigation/Navigation.types";
+import { WindowsDataElement } from "./Desktop.types";
+import Navigation from "../../simple/Navigation/Navigation";
 
 export const Desktop: React.FC = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<WindowsDataElement[]>([]);
   useEffect(() => {
     fetchData()
       .then((data) => {
@@ -23,6 +26,15 @@ export const Desktop: React.FC = () => {
         console.error(error);
       });
   }, []);
+
+  const navData: NavDataElement[] = data.map(
+    (window): WindowsDataElement =>
+      ({
+        id: window.id,
+        header: window.header,
+      } as WindowsDataElement)
+  );
+
   const [store, dispatch] = useReducer<Reducer<IState, IAction>>(
     windowReducer,
     initialState
@@ -33,9 +45,9 @@ export const Desktop: React.FC = () => {
     const isWindowAlreadyOpen = isWindowOpen(store, id);
     const isNotFirstWindow: boolean = !!store.windows.length;
     if (!isWindowAlreadyOpen) {
-      let newWindow = createNewWindow(
-        data,
-        id,
+      const windowContent = getWindowData(data, id);
+      let newWindow = createWindow(
+        windowContent,
         lastCoords,
         isNotFirstWindow,
         handleCloseWindow,
@@ -60,9 +72,9 @@ export const Desktop: React.FC = () => {
   const handleRestoreWindow = (id: string) => {
     dispatch({ type: "CLOSE_WINDOW", id });
     const isNotFirstWindow: boolean = !!store.windows.length;
-    let newWindow = createNewWindow(
-      data,
-      id,
+    const windowContent = getWindowData(data, id);
+    let newWindow = createWindow(
+      windowContent,
       lastCoords,
       isNotFirstWindow,
       handleCloseWindow,
@@ -76,12 +88,13 @@ export const Desktop: React.FC = () => {
   return (
     <>
       <div className={styles.desktop} id="desktop">
-        <button onClick={() => handleOpenWindow("cla8eqmt70b4o0cw1j3kbgrbm")}>
+        <Navigation data={navData} onWindowOpen={handleOpenWindow} />
+        {/*<button onClick={() => handleOpenWindow("cla8eqmt70b4o0cw1j3kbgrbm")}>
           1 Window
         </button>
         <button onClick={() => handleOpenWindow("cleki52d51f2t0bw1e8kp5riv")}>
           2 Window
-        </button>
+        </button>*/}
         <Icon
           size="md"
           label="Тестовая иконка"

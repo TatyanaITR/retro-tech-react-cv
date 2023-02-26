@@ -42,7 +42,10 @@ const getWindowCoords = (
   return coords;
 };
 
-const getWindowData = (data: WindowsData, id: string): WindowsDataElement => {
+export const getWindowData = (
+  data: WindowsData,
+  id: string
+): WindowsDataElement => {
   const windowData = data.find((window) => window.id === id);
   if (!windowData) {
     throw new Error(`Window data not found for id ${id}`);
@@ -56,28 +59,25 @@ export const isWindowOpen = (state: IState, id: string): boolean => {
   );
 };
 
-export const createNewWindow = (
-  data: WindowsData,
-  id: string,
+export const createWindow = (
+  windowContent: WindowsDataElement,
   lastCoords: Coords,
   isNotFirstWindow: boolean,
   handleCloseWindow: (id: string) => void,
   handleMinimizeWindow: (id: string) => void,
   handleMouseDownWindow: (id: string) => void
-) => {
-  const windowContent = getWindowData(data, id);
+): IWindow => {
   let coords: Coords = getWindowCoords(
     isNotFirstWindow,
     appSettings.mockWindowSize.w,
     appSettings.mockWindowSize.h,
     lastCoords
   );
-  const newWindow: IWindow = {
+  return {
     ...windowContent,
     coords,
     onClose: handleCloseWindow,
     onMinimize: handleMinimizeWindow,
     onMouseDown: handleMouseDownWindow,
   };
-  return newWindow;
 };
