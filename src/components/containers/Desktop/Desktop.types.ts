@@ -17,7 +17,7 @@ export type WindowsDataElement = {
   header: string;
   buttons: string[];
   size?: Size;
-  type: string;
+  windowtypes: string;
   content: Content[] | [];
 };
 export type WindowsData = WindowsDataElement[];

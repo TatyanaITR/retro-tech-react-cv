@@ -5,7 +5,7 @@ const window: IWindow = {
   coords: { x: 15, y: 20 },
   header: "This header",
   content: [],
-  type: "default",
+  windowtypes: "default",
   buttons: ["close", "minimize"],
   onClose: () => console.log("Closing window"),
   onMinimize: () => console.log("Minimizing window"),

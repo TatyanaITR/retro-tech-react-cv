@@ -18,14 +18,13 @@ const MinimizedWindow: React.FC<IMinimizedWindow> = ({
 
   return (
     <div className={windowClass} id={windowId}>
-      <div className={styles.headerWrapper} onClick={() => onRestore(id)}>
-        <div className={styles.headerText}>{header}</div>
+      <div className={styles.headerWrapper}>
+        <div className={styles.headerText} onClick={() => onRestore(id)}>
+          {header}
+        </div>
         <div className={styles.windowControls}>
           <button onClick={() => onClose(id)}>X</button>
         </div>
-      </div>
-      <div className={styles.windowContent}>
-        This is the content of window {id}.
       </div>
     </div>
   );

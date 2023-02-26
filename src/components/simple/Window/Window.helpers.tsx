@@ -6,7 +6,7 @@ import { WindowDefaultContentType } from "./ContentTypes/WindowDefaultContentTyp
 export const setWindowContentType = (
   type: string,
   content: Content[] | []
-): React.ReactNode | React.ReactHTML => {
+): React.ReactNode => {
   switch (type) {
     case "default":
       return <WindowDefaultContentType content={content} />;

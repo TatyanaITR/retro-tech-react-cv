@@ -8,7 +8,6 @@ import windowReducer, {
 import { IAction } from "../../../core/store/windowReducer.types";
 import { appSettings } from "../../../core/config/variables";
 import styles from "./Desktop.module.css";
-import { WindowsData } from "./Desktop.types";
 import { createNewWindow, isWindowOpen } from "./Desktop.helpers";
 import { fetchData } from "../../../core/utils/hygraph.utils";
 
@@ -23,28 +22,6 @@ export const Desktop: React.FC = () => {
         console.error(error);
       });
   }, []);
-  /*const data: WindowsData = [
-    {
-      id: 1,
-      header: "header 1",
-      buttons: ["close"],
-      type: "default",
-      content: [
-        {
-          defaultcontent: {
-            html: "<p>Content AboutMe</p>",
-          },
-        },
-      ],
-    },
-    {
-      id: 2,
-      header: "header 2",
-      buttons: ["close", "minimize"],
-      type: "feedback",
-      content: [],
-    },
-  ];*/
   const [store, dispatch] = useReducer<Reducer<IState, IAction>>(
     windowReducer,
     initialState
@@ -100,7 +77,9 @@ export const Desktop: React.FC = () => {
       <button onClick={() => handleOpenWindow("cla8eqmt70b4o0cw1j3kbgrbm")}>
         1 Window
       </button>
-      <button onClick={() => handleOpenWindow("")}>2 Window</button>
+      <button onClick={() => handleOpenWindow("cleki52d51f2t0bw1e8kp5riv")}>
+        2 Window
+      </button>
       <div id="windowsContainer" className={styles.windowsContainer}>
         {store.windows.map((window) => (
           <Window

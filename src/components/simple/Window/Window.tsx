@@ -12,8 +12,8 @@ export interface IWindow {
   size?: Size;
   header: string;
   content: Content[] | [];
-  type?: string;
-  buttons: string[];
+  windowtypes?: string;
+  buttons?: string[];
   isActive?: boolean;
   onClose: (id: string) => void;
   onMinimize: (id: string) => void;
@@ -26,13 +26,14 @@ const Window: React.FC<IWindow> = ({
   size = { w: 400, h: 300 },
   header,
   content,
-  type = "default",
+  windowtypes = "default",
   buttons,
   isActive = false,
   onClose,
   onMinimize,
   onMouseDown,
 }: IWindow) => {
+  const allButtons = buttons?.length ? buttons : ["minimize", "close"];
   const handleButtonClick = (button: string) => {
     switch (button) {
       case "close":
@@ -45,7 +46,7 @@ const Window: React.FC<IWindow> = ({
         break;
     }
   };
-  const windowContent = setWindowContentType(type, content);
+  const windowContent = setWindowContentType(windowtypes, content);
   const windowId: string = `window-${id}`;
   const windowCls = cn(styles.window, {
     [styles["window-active"]]: isActive,
@@ -66,11 +67,11 @@ const Window: React.FC<IWindow> = ({
         <div className={styles.headerWrapper}>
           <div className={styles.headerText}>{header}</div>
           <div className={styles.windowControls}>
-            {buttons.includes("close") && (
-              <button onClick={() => handleButtonClick("close")}>X</button>
-            )}
-            {buttons.includes("minimize") && (
+            {allButtons.includes("minimize") && (
               <button onClick={() => handleButtonClick("minimize")}>-</button>
+            )}
+            {allButtons.includes("close") && (
+              <button onClick={() => handleButtonClick("close")}>X</button>
             )}
           </div>
         </div>
