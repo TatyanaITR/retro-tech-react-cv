@@ -1,9 +1,8 @@
-import { IAction, windowToMinimizedWindow } from "./windowReducer.types";
+import { IAction } from "./windowReducer.types";
 import { IWindow } from "../../components/simple/Window/Window";
-import { IMinimizedWindow } from "../../components/simple/MinimizedWindow/MinimizedWindow";
 
 type IWindowState = Array<IWindow>;
-type IMinimizedWindowState = Array<IMinimizedWindow>;
+type IMinimizedWindowState = Array<IWindow>;
 
 export interface IState {
   windows: IWindowState;
@@ -37,20 +36,17 @@ function windowReducer(state: IState, action: IAction): IState {
         ),
       };
     case "MINIMIZE_WINDOW":
-      const windowToMinimize = state.windows.find(
+      const minimizedWindow: IWindow | undefined = state.windows.find(
         (window) => window.id === action.id
       );
-      if (windowToMinimize) {
-        return {
-          ...state,
-          windows: state.windows.filter((window) => window.id !== action.id),
-          minimizedWindows: [
-            ...state.minimizedWindows,
-            { ...windowToMinimizedWindow(windowToMinimize) },
-          ],
-        };
+      if (!minimizedWindow) {
+        throw new Error("There is a problem with minimized window");
       }
-      return state;
+      return {
+        ...state,
+        windows: state.windows.filter((window) => window.id !== action.id),
+        minimizedWindows: [...state.minimizedWindows, minimizedWindow],
+      };
     case "ACTIVATE_WINDOW":
       return {
         ...state,
@@ -58,6 +54,20 @@ function windowReducer(state: IState, action: IAction): IState {
           ...window,
           isActive: window.id === action.id,
         })),
+      };
+    case "RESTORE_WINDOW":
+      const restoredWindow: IWindow | undefined = state.minimizedWindows.find(
+        (window) => window.id === action.id
+      );
+      if (!restoredWindow) {
+        throw new Error("There is a problem with restored window");
+      }
+      return {
+        ...state,
+        windows: [...state.windows, restoredWindow],
+        minimizedWindows: state.minimizedWindows.filter(
+          (window) => window.id !== action.id
+        ),
       };
     default:
       return state;

@@ -18,6 +18,7 @@ export interface IWindow {
   onClose: (id: string) => void;
   onMinimize: (id: string) => void;
   onMouseDown: (id: string) => void;
+  onRestore: (id: string) => void;
 }
 
 const Window: React.FC<IWindow> = ({

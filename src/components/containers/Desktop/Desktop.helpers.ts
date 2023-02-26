@@ -1,4 +1,4 @@
-import { WindowsData, WindowsDataElement } from "./Desktop.types";
+import { IHandleIconDoubleClick, WindowsDataElement } from "./Desktop.types";
 import { IState } from "../../../core/store/windowReducer";
 import { appSettings } from "../../../core/config/variables";
 import { Coords } from "../../../core/types/commonTypes";
@@ -24,7 +24,7 @@ const calcWindowCoords = (
 
   return lastCoords;
 };
-const getWindowCoords = (
+export const getWindowCoords = (
   isNotFirstWindow: boolean,
   windowWidth: number,
   windowHeight: number,
@@ -43,7 +43,7 @@ const getWindowCoords = (
 };
 
 export const getWindowData = (
-  data: WindowsData,
+  data: WindowsDataElement[],
   id: string
 ): WindowsDataElement => {
   const windowData = data.find((window) => window.id === id);
@@ -51,6 +51,21 @@ export const getWindowData = (
     throw new Error(`Window data not found for id ${id}`);
   }
   return windowData;
+};
+export const createWindowData = (
+  props: IHandleIconDoubleClick
+): WindowsDataElement => {
+  if (!props.header || !props.windowtypes) {
+    throw new Error("Header and windowtypes are required");
+  }
+  return {
+    id: props.id,
+    header: props.header,
+    windowtypes: props.windowtypes,
+    buttons: props.buttons,
+    size: props.size,
+    content: [],
+  };
 };
 
 export const isWindowOpen = (state: IState, id: string): boolean => {
@@ -65,7 +80,8 @@ export const createWindow = (
   isNotFirstWindow: boolean,
   handleCloseWindow: (id: string) => void,
   handleMinimizeWindow: (id: string) => void,
-  handleMouseDownWindow: (id: string) => void
+  handleMouseDownWindow: (id: string) => void,
+  handleRestoreWindow: (id: string) => void
 ): IWindow => {
   let coords: Coords = getWindowCoords(
     isNotFirstWindow,
@@ -79,5 +95,6 @@ export const createWindow = (
     onClose: handleCloseWindow,
     onMinimize: handleMinimizeWindow,
     onMouseDown: handleMouseDownWindow,
+    onRestore: handleRestoreWindow,
   };
 };

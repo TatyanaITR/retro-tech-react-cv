@@ -1,5 +1,6 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import MinimizedWindow, { IMinimizedWindow } from "./MinimizedWindow";
+import MinimizedWindow from "./MinimizedWindow";
+import { IWindow } from "../Window/Window";
 import { mockMinimizedWindowProps } from "./MinimizedWindow.mocks";
 
 export default {
@@ -16,4 +17,4 @@ export const Base = Template.bind({});
 
 Base.args = {
   ...mockMinimizedWindowProps.window,
-} as IMinimizedWindow;
+} as IWindow;

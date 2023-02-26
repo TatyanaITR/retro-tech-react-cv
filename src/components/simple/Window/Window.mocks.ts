@@ -10,6 +10,7 @@ const window: IWindow = {
   onClose: () => console.log("Closing window"),
   onMinimize: () => console.log("Minimizing window"),
   onMouseDown: () => (window.isActive = true),
+  onRestore: () => {},
 };
 
 export const mockWindowProps = {

@@ -1,10 +1,11 @@
 import React from "react";
 import Icon from "../Icon/Icon";
 import styles from "./Navigation.module.css";
+import { IHandleIconDoubleClick } from "../../containers/Desktop/Desktop.types";
 
 export interface INavigation {
   data: { id: string; header: string }[];
-  onWindowOpen: (id: string) => void;
+  onWindowOpen: (props: IHandleIconDoubleClick) => void;
 }
 
 const Navigation: React.FC<INavigation> = ({ data, onWindowOpen }) => {
@@ -16,7 +17,7 @@ const Navigation: React.FC<INavigation> = ({ data, onWindowOpen }) => {
           size="md"
           label={header}
           iconName="icon-doc"
-          onDoubleClick={() => onWindowOpen(id)}
+          onDoubleClick={() => onWindowOpen({ id })}
         />
       ))}
     </nav>

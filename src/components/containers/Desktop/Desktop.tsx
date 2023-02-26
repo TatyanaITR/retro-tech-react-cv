@@ -8,11 +8,16 @@ import windowReducer, {
 import { IAction } from "../../../core/store/windowReducer.types";
 import { appSettings } from "../../../core/config/variables";
 import styles from "./Desktop.module.css";
-import { createWindow, getWindowData, isWindowOpen } from "./Desktop.helpers";
+import {
+  createWindow,
+  createWindowData,
+  getWindowData,
+  isWindowOpen,
+} from "./Desktop.helpers";
 import { fetchData } from "../../../core/utils/hygraph.utils";
 import Icon from "../../simple/Icon/Icon";
 import { NavDataElement } from "../../simple/Navigation/Navigation.types";
-import { WindowsDataElement } from "./Desktop.types";
+import { IHandleIconDoubleClick, WindowsDataElement } from "./Desktop.types";
 import Navigation from "../../simple/Navigation/Navigation";
 
 export const Desktop: React.FC = () => {
@@ -41,22 +46,34 @@ export const Desktop: React.FC = () => {
   );
   const [lastCoords, setLastCoords] = useState(appSettings.initialCoords);
 
-  const handleOpenWindow = (id: string) => {
-    const isWindowAlreadyOpen = isWindowOpen(store, id);
-    const isNotFirstWindow: boolean = !!store.windows.length;
+  const handleIconDoubleClick = (props: IHandleIconDoubleClick): void => {
+    const isWindowAlreadyOpen = isWindowOpen(store, props.id);
     if (!isWindowAlreadyOpen) {
-      const windowContent = getWindowData(data, id);
-      let newWindow = createWindow(
-        windowContent,
-        lastCoords,
-        isNotFirstWindow,
-        handleCloseWindow,
-        handleMinimizeWindow,
-        handleMouseDownWindow
-      );
-      setLastCoords(newWindow.coords);
-      dispatch({ type: "OPEN_WINDOW", window: newWindow });
+      const isNotFirstWindow: boolean = !!store.windows.length;
+      let windowData: WindowsDataElement;
+      if (props.header && props.windowtypes) {
+        windowData = createWindowData(props);
+      } else {
+        windowData = getWindowData(data, props.id);
+      }
+      handleOpenWindow(windowData, isNotFirstWindow);
     }
+  };
+  const handleOpenWindow = (
+    windowData: WindowsDataElement,
+    isNotFirstWindow: boolean
+  ) => {
+    let newWindow = createWindow(
+      windowData,
+      lastCoords,
+      isNotFirstWindow,
+      handleCloseWindow,
+      handleMinimizeWindow,
+      handleMouseDownWindow,
+      handleRestoreWindow
+    );
+    setLastCoords(newWindow.coords);
+    dispatch({ type: "OPEN_WINDOW", window: newWindow });
   };
 
   const handleCloseWindow = (id: string) => {
@@ -67,28 +84,16 @@ export const Desktop: React.FC = () => {
     dispatch({ type: "MINIMIZE_WINDOW", id });
   };
   const handleMouseDownWindow = (id: string) => {
-    dispatch({ type: "ACTIVATE_WINDOW", id: id });
+    dispatch({ type: "ACTIVATE_WINDOW", id });
   };
   const handleRestoreWindow = (id: string) => {
-    dispatch({ type: "CLOSE_WINDOW", id });
-    const isNotFirstWindow: boolean = !!store.windows.length;
-    const windowContent = getWindowData(data, id);
-    let newWindow = createWindow(
-      windowContent,
-      lastCoords,
-      isNotFirstWindow,
-      handleCloseWindow,
-      handleMinimizeWindow,
-      handleMouseDownWindow
-    );
-    setLastCoords(newWindow.coords);
-    dispatch({ type: "OPEN_WINDOW", window: newWindow });
+    dispatch({ type: "RESTORE_WINDOW", id });
   };
 
   return (
     <>
       <div className={styles.desktop} id="desktop">
-        <Navigation data={navData} onWindowOpen={handleOpenWindow} />
+        <Navigation data={navData} onWindowOpen={handleIconDoubleClick} />
         {/*<button onClick={() => handleOpenWindow("cla8eqmt70b4o0cw1j3kbgrbm")}>
           1 Window
         </button>
@@ -99,7 +104,9 @@ export const Desktop: React.FC = () => {
           size="md"
           label="Тестовая иконка"
           iconName="icon-doc"
-          onDoubleClick={() => handleOpenWindow("cla8eqmt70b4o0cw1j3kbgrbm")}
+          onDoubleClick={() =>
+            handleIconDoubleClick({ id: "cla8eqmt70b4o0cw1j3kbgrbm" })
+          }
         />
         {store.windows.map((window) => (
           <Window
@@ -117,6 +124,8 @@ export const Desktop: React.FC = () => {
             key={window.id}
             {...window}
             onClose={handleCloseWindow}
+            onMinimize={handleMinimizeWindow}
+            onMouseDown={handleMouseDownWindow}
             onRestore={handleRestoreWindow}
           />
         ))}

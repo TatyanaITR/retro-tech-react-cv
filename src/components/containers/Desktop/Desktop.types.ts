@@ -15,9 +15,17 @@ export type Content = ContentDefault | ContentJobsListItem;
 export type WindowsDataElement = {
   id: string;
   header: string;
-  buttons: string[];
+  buttons?: string[];
   size?: Size;
   windowtypes: string;
   content: Content[] | [];
 };
-export type WindowsData = WindowsDataElement[];
+
+export interface IHandleIconDoubleClick {
+  id: string;
+  header?: string;
+  windowtypes?: string;
+  buttons?: string[];
+  size?: Size;
+  content?: [];
+}
