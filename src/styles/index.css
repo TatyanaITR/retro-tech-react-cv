@@ -5,4 +5,5 @@
 
 @import "./layout/typography.css";
 @import "./layout/layout.css";
+@import "./layout/ui.css";
 @import "react-toastify/dist/ReactToastify.css";

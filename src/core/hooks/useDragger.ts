@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export function useDragger(id: string, handleSelector: string) {
+export function useDragger(id: string, handleSelector?: string) {
   const isClicked = useRef<boolean>(false);
   const coords = useRef<{
     startX: number;
@@ -22,24 +22,25 @@ export function useDragger(id: string, handleSelector: string) {
     if (!container) throw new Error("Target element must have a parent");
 
     const containerRect = container.getBoundingClientRect();
-    const handle = target.querySelector(handleSelector) as HTMLElement;
-    if (!handle)
-      throw new Error("Element with given handle selector doesn't exist");
-
+    const handle = handleSelector
+      ? (target.querySelector(handleSelector) as HTMLElement)
+      : target;
     const handleRect = handle.getBoundingClientRect();
 
     const onMouseDown = (e: MouseEvent) => {
-      if (e.target === handle) {
-        isClicked.current = true;
-        coords.current.startX = e.clientX;
-        coords.current.startY = e.clientY;
-      }
+      if (!handle.contains(e.target as HTMLElement)) return;
+
+      isClicked.current = true;
+      coords.current.startX = e.clientX;
+      coords.current.startY = e.clientY;
+      target.classList.add("noSelect");
     };
 
     const onMouseUp = () => {
       isClicked.current = false;
       coords.current.lastX = target.offsetLeft;
       coords.current.lastY = target.offsetTop;
+      target.classList.remove("noSelect");
     };
 
     const onMouseMove = (e: MouseEvent) => {
@@ -64,15 +65,20 @@ export function useDragger(id: string, handleSelector: string) {
         target.style.top = `${nextY}px`;
       }
     };
+    const onDragStart = (e: DragEvent) => {
+      e.preventDefault();
+    };
 
     container.addEventListener("mousedown", onMouseDown as EventListener);
     container.addEventListener("mouseup", onMouseUp as EventListener);
     container.addEventListener("mousemove", onMouseMove as EventListener);
+    handle.addEventListener("dragstart", onDragStart as EventListener);
 
     return () => {
       container.removeEventListener("mousedown", onMouseDown as EventListener);
       container.removeEventListener("mouseup", onMouseUp as EventListener);
       container.removeEventListener("mousemove", onMouseMove as EventListener);
+      handle.removeEventListener("dragstart", onDragStart as EventListener);
     };
   }, [id, handleSelector]);
 }

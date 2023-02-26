@@ -3,7 +3,7 @@ import { useDragger } from "../../../core/hooks/useDragger";
 export type DraggableElementProps = {
   id: string;
   className?: string;
-  handleSelector: string;
+  handleSelector?: string;
   style?: CSSProperties;
   children?: React.ReactNode;
 };

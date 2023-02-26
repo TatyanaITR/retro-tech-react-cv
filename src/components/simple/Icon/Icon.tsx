@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState} from "react";
 import styles from "./Icon.module.css";
 import cn from "classnames";
 import DraggableElement from "../../containers/DraggableElement/DraggableElement";
@@ -17,7 +17,6 @@ const Icon: React.FC<IIcon> = ({
   onDoubleClick,
 }) => {
   const [isSelect, setIsSelect] = useState(false);
-  const iconRef = useRef<HTMLDivElement>(null);
 
   const handleIconClick = () => {
     setIsSelect(true);
@@ -42,14 +41,9 @@ const Icon: React.FC<IIcon> = ({
   });
 
   return (
-    <DraggableElement
-      handleSelector={`.icon-img`}
-      id={label}
-      className={styles["draggable-icon"]}
-    >
+    <DraggableElement id={label} className={styles["draggable-icon"]}>
       <div
         className={iconClassNames}
-        ref={iconRef}
         onDoubleClick={handleDoubleClick}
         onClick={handleIconClick}
         onBlur={handleContainerBlur}
