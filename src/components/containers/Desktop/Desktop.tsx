@@ -94,12 +94,6 @@ export const Desktop: React.FC = () => {
     <>
       <div className={styles.desktop} id="desktop">
         <Navigation data={navData} onWindowOpen={handleIconDoubleClick} />
-        {/*<button onClick={() => handleOpenWindow("cla8eqmt70b4o0cw1j3kbgrbm")}>
-          1 Window
-        </button>
-        <button onClick={() => handleOpenWindow("cleki52d51f2t0bw1e8kp5riv")}>
-          2 Window
-        </button>*/}
         <Icon
           size="md"
           label="Тестовая иконка"

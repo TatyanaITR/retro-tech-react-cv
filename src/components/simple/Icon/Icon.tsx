@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import styles from "./Icon.module.css";
 import cn from "classnames";
 import DraggableElement from "../../containers/DraggableElement/DraggableElement";
@@ -33,9 +33,7 @@ const Icon: React.FC<IIcon> = ({
     }
   };
 
-  const iconPath = `${
-    import.meta.env.VITE_ASSETS_PATH
-  }/images/icons/${iconName}.svg`;
+  const iconPath = `${import.meta.env.VITE_PUBLIC_PATH}/icons/${iconName}.svg`;
   const iconClassNames = cn(styles.icon, styles[`icon-${size}`], {
     [styles["icon-select"]]: isSelect,
   });
