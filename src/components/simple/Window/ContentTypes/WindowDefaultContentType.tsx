@@ -2,11 +2,11 @@ import React from "react";
 import {
   Content,
   ContentDefault,
+  WindowsDataElement,
 } from "../../../containers/Desktop/Desktop.types";
-import { NavDataElement } from "../../Navigation/Navigation.types";
 
 interface WindowDefaultContentTypeProps {
-  content: Content[] | [] | NavDataElement[];
+  content: Content[] | [] | WindowsDataElement[];
 }
 
 export const WindowDefaultContentType: React.FC<

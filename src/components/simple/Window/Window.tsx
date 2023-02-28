@@ -27,7 +27,10 @@ export interface IWindow {
 const Window: React.FC<IWindow> = ({
   id,
   coords,
-  size = { w: appSettings.mockWindowSize.w, h: appSettings.mockWindowSize.h },
+  size = {
+    w: appSettings.defaultWindowSize.w,
+    h: appSettings.defaultWindowSize.h,
+  },
   header,
   content,
   windowtypes = "default",

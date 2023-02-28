@@ -1,5 +1,4 @@
 import { Size } from "../../../core/types/commonTypes";
-import { NavDataElement } from "../../simple/Navigation/Navigation.types";
 import { IState } from "../../../core/store/windowReducer";
 
 export interface ContentDefault {
@@ -30,13 +29,13 @@ export interface IHandleIconDoubleClick {
   windowtypes?: string;
   buttons?: string[];
   size?: Size;
-  content?: [] | NavDataElement[];
+  content?: [] | WindowsDataElement[];
   handlerFunction?: (...args: any[]) => any;
 }
 
 export interface IDesktopContext {
   store: IState;
-  navData: NavDataElement[];
+  navData: WindowsDataElement[];
   handleMinimizeWindow: (id: string) => void;
   handleCloseWindow: (id: string) => void;
   handleRestoreWindow: (id: string) => void;

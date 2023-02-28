@@ -11,7 +11,6 @@ import {
   IHandleIconDoubleClick,
   WindowsDataElement,
 } from "./Desktop.types";
-import { NavDataElement } from "../../simple/Navigation/Navigation.types";
 import { fetchData } from "../../../core/utils/hygraph.utils";
 import windowReducer, {
   initialState,
@@ -50,11 +49,12 @@ export const DesktopProvider: React.FC<{ children: React.ReactNode }> = ({
       });
   }, []);
 
-  const navData: NavDataElement[] = data.map(
+  const navData: WindowsDataElement[] = data.map(
     (window): WindowsDataElement =>
       ({
         id: window.id,
         header: window.header,
+        iconName: window.iconName,
       } as WindowsDataElement)
   );
 
@@ -63,7 +63,6 @@ export const DesktopProvider: React.FC<{ children: React.ReactNode }> = ({
     initialState
   );
   const [lastCoords, setLastCoords] = useState(appSettings.initialCoords);
-
   const handleIconDoubleClick = useCallback(
     (props: IHandleIconDoubleClick): void => {
       const isWindowAlreadyOpen = isWindowOpen(store, props.id);

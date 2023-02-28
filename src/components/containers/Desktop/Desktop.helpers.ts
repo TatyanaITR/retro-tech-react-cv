@@ -82,15 +82,22 @@ export const createWindow = (
   handleMouseDownWindow: (id: string) => void,
   handleRestoreWindow: (id: string) => void
 ): IWindow => {
+  const { size } = windowContent;
+  const defaultSize = {
+    w: appSettings.defaultWindowSize.w,
+    h: appSettings.defaultWindowSize.h,
+  };
+  const windowSize = size ? { ...size } : defaultSize;
+
   let coords: Coords = getWindowCoords(
     isNotFirstWindow,
-    windowContent.size
-      ? { w: windowContent.size.w, h: windowContent.size.h }
-      : { w: appSettings.mockWindowSize.w, h: appSettings.mockWindowSize.h },
+    windowSize,
     lastCoords
   );
+
+  const windowData = { ...windowContent, size: windowSize };
   return {
-    ...windowContent,
+    ...windowData,
     coords,
     onClose: handleCloseWindow,
     onMinimize: handleMinimizeWindow,
