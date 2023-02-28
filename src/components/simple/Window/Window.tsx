@@ -6,6 +6,7 @@ import { Coords, Size } from "../../../core/types/commonTypes";
 import { Content } from "../../containers/Desktop/Desktop.types";
 import { setWindowContentType } from "./Window.helpers";
 import { appSettings } from "../../../core/config/variables";
+import Icon from "../Icon/Icon";
 
 export interface IWindow {
   id: string;
@@ -16,6 +17,7 @@ export interface IWindow {
   windowtypes?: string;
   buttons?: string[];
   isActive?: boolean;
+  iconName?: string;
   onClose: (id: string) => void;
   onMinimize: (id: string) => void;
   onMouseDown: (id: string) => void;
@@ -30,6 +32,7 @@ const Window: React.FC<IWindow> = ({
   content,
   windowtypes = "default",
   buttons,
+  iconName = "defaultIcon",
   isActive = false,
   onClose,
   onMinimize,
@@ -67,6 +70,13 @@ const Window: React.FC<IWindow> = ({
     >
       <div onMouseDown={() => onMouseDown(id)}>
         <div className={styles.headerWrapper}>
+          <div className={styles.headerIcon}>
+            <Icon
+              size="sm"
+              iconName={iconName}
+              windowProps={{ id: `header-icon-${id}` }}
+            />
+          </div>
           <div className={styles.headerText}>{header}</div>
           <div className={styles.windowControls}>
             {allButtons.includes("minimize") && (

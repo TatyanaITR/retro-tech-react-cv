@@ -7,12 +7,12 @@ const Navigation: React.FC = () => {
   const { navData } = useContext(DesktopContext);
   return (
     <nav className={styles.container}>
-      {navData.map(({ id, header }) => (
+      {navData.map(({ id, header, iconName }) => (
         <Icon
           key={id}
           size="md"
           label={header}
-          iconName="icon-doc"
+          iconName={iconName ? iconName : "defaultIcon"}
           windowProps={{ id }}
         />
       ))}

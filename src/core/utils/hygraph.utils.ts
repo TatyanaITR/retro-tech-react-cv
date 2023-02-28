@@ -9,6 +9,7 @@ export const fetchData = async () => {
     header
     windowtypes
     buttons
+    iconName
     size {
       ... on Size {
         w
@@ -16,7 +17,7 @@ export const fetchData = async () => {
       }
     }
     content {
-      ... on CondentDefault {
+      ... on ContentDefault {
         defaultcontent {
           html
         }

@@ -21,7 +21,7 @@ export const Desktop: React.FC = () => {
       <div className={styles.desktop} id="desktop">
         <Icon
           size="md"
-          label="Тестовая иконка"
+          label="DoubleClickMe!"
           iconName="icon-doc"
           windowProps={{
             id: appSettings.navId,

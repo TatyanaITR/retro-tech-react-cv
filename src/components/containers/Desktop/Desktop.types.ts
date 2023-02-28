@@ -21,6 +21,7 @@ export type WindowsDataElement = {
   size?: Size;
   windowtypes: string;
   content: Content[] | [];
+  iconName?: string;
 };
 
 export interface IHandleIconDoubleClick {

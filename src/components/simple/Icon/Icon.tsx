@@ -7,7 +7,7 @@ import { IHandleIconDoubleClick } from "../../containers/Desktop/Desktop.types";
 
 interface IIcon {
   iconName: string;
-  label: string;
+  label?: string;
   size: "sm" | "md" | "lg";
   windowProps: IHandleIconDoubleClick;
 }
@@ -51,7 +51,7 @@ const Icon: React.FC<IIcon> = ({
         tabIndex={0}
       >
         <img src={iconPath} alt={label} className="icon-img" />
-        <span className="icon-label">{label}</span>
+        {label && <span className="icon-label">{label}</span>}
       </div>
     </DraggableElement>
   );
