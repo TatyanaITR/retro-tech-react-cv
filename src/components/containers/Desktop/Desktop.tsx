@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
 import Window from "../../simple/Window/Window";
-import MinimizedWindow from "../../simple/MinimizedWindow/MinimizedWindow";
 import styles from "./Desktop.module.css";
 import Icon from "../../simple/Icon/Icon";
 import Navigation from "../../simple/Navigation/Navigation";
 import { DesktopContext } from "./Desktop.context";
 import { appSettings } from "../../../core/config/variables";
+import MinimizedWindowsBar from "../MinimizedWindowsBar/MinimizedWindowsBar";
 
 export const Desktop: React.FC = () => {
   const {
@@ -39,15 +39,10 @@ export const Desktop: React.FC = () => {
             onMouseDown={handleMouseDownWindow}
           />
         ))}
-      </div>
-      <div id="minimizedWindowsBar" className={styles.minimizedWindowsBar}>
-        {store.minimizedWindows.map((window) => (
-          <MinimizedWindow
-            key={window.id}
-            {...window}
-            onRestore={handleRestoreWindow}
-          />
-        ))}
+        <MinimizedWindowsBar
+          minimizedWindows={store.minimizedWindows}
+          handleRestoreWindow={handleRestoreWindow}
+        />
       </div>
     </>
   );

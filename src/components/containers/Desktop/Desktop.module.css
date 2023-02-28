@@ -2,8 +2,3 @@
   position: relative;
   flex-grow: 1;
 }
-.minimizedWindowsBar {
-  height: 60px;
-  position: relative;
-  display: flex;
-}
