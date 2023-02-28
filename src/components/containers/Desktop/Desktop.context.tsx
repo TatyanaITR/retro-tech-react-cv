@@ -1,6 +1,7 @@
 import React, {
   createContext,
   Reducer,
+  useCallback,
   useEffect,
   useReducer,
   useState,
@@ -28,7 +29,6 @@ import {
 export const DesktopContext = createContext<IDesktopContext>({
   store: { windows: [], minimizedWindows: [] },
   navData: [],
-  handleOpenWindow: () => {},
   handleMinimizeWindow: () => {},
   handleCloseWindow: () => {},
   handleRestoreWindow: () => {},
@@ -64,19 +64,23 @@ export const DesktopProvider: React.FC<{ children: React.ReactNode }> = ({
   );
   const [lastCoords, setLastCoords] = useState(appSettings.initialCoords);
 
-  const handleIconDoubleClick = (props: IHandleIconDoubleClick): void => {
-    const isWindowAlreadyOpen = isWindowOpen(store, props.id);
-    if (!isWindowAlreadyOpen) {
-      const isNotFirstWindow: boolean = !!store.windows.length;
-      let windowData: WindowsDataElement;
-      if (props.header && props.windowtypes) {
-        windowData = createWindowData(props);
-      } else {
-        windowData = getWindowData(data, props.id);
+  const handleIconDoubleClick = useCallback(
+    (props: IHandleIconDoubleClick): void => {
+      const isWindowAlreadyOpen = isWindowOpen(store, props.id);
+      if (!isWindowAlreadyOpen) {
+        const isNotFirstWindow: boolean = !!store.windows.length;
+        let windowData: WindowsDataElement;
+        if (props.header && props.windowtypes) {
+          windowData = createWindowData(props);
+        } else {
+          windowData = getWindowData(data, props.id);
+        }
+        handleOpenWindow(windowData, isNotFirstWindow);
       }
-      handleOpenWindow(windowData, isNotFirstWindow);
-    }
-  };
+    },
+    [store, data]
+  );
+
   const handleOpenWindow = (
     windowData: WindowsDataElement,
     isNotFirstWindow: boolean
@@ -112,7 +116,6 @@ export const DesktopProvider: React.FC<{ children: React.ReactNode }> = ({
   const contextValue: IDesktopContext = {
     navData,
     store,
-    handleOpenWindow,
     handleMinimizeWindow,
     handleCloseWindow,
     handleRestoreWindow,

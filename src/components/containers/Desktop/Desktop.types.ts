@@ -36,10 +36,6 @@ export interface IHandleIconDoubleClick {
 export interface IDesktopContext {
   store: IState;
   navData: NavDataElement[];
-  handleOpenWindow: (
-    windowData: WindowsDataElement,
-    isNotFirstWindow: boolean
-  ) => void;
   handleMinimizeWindow: (id: string) => void;
   handleCloseWindow: (id: string) => void;
   handleRestoreWindow: (id: string) => void;

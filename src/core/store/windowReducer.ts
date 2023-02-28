@@ -17,36 +17,47 @@ export const initialState: IState = {
 function windowReducer(state: IState, action: IAction): IState {
   switch (action.type) {
     case "OPEN_WINDOW":
-      const inactiveWindows = state.windows.map((window) => {
-        return {
-          ...window,
-          isActive: false,
-        };
-      });
       return {
         ...state,
-        windows: [...inactiveWindows, { ...action.window, isActive: true }],
+        windows: [
+          ...state.windows.map((window) => ({ ...window, isActive: false })),
+          { ...action.window, isActive: true },
+        ],
       };
     case "CLOSE_WINDOW":
+      const updatedWindows = state.windows
+        .filter((window) => window.id !== action.id)
+        .map((window, index, windows) => ({
+          ...window,
+          isActive: windows.length === 1 || index === windows.length - 1,
+        }));
       return {
         ...state,
-        windows: state.windows.filter((window) => window.id !== action.id),
+        windows: updatedWindows,
         minimizedWindows: state.minimizedWindows.filter(
           (window) => window.id !== action.id
         ),
       };
+
     case "MINIMIZE_WINDOW":
-      const minimizedWindow: IWindow | undefined = state.windows.find(
+      const minimizedWindow = state.windows.find(
         (window) => window.id === action.id
       );
       if (!minimizedWindow) {
         throw new Error("There is a problem with minimized window");
       }
+      const updatedWindowsOnMinimize = state.windows.map((window) => ({
+        ...window,
+        isActive: window.id !== action.id && window.isActive,
+      }));
       return {
         ...state,
-        windows: state.windows.filter((window) => window.id !== action.id),
+        windows: updatedWindowsOnMinimize.filter(
+          (window) => window.id !== action.id
+        ),
         minimizedWindows: [...state.minimizedWindows, minimizedWindow],
       };
+
     case "ACTIVATE_WINDOW":
       return {
         ...state,
@@ -62,9 +73,16 @@ function windowReducer(state: IState, action: IAction): IState {
       if (!restoredWindow) {
         throw new Error("There is a problem with restored window");
       }
+      const updatedWindowsOnRestore = state.windows.map((window) => ({
+        ...window,
+        isActive: false,
+      }));
       return {
         ...state,
-        windows: [...state.windows, restoredWindow],
+        windows: [
+          ...updatedWindowsOnRestore,
+          { ...restoredWindow, isActive: true },
+        ],
         minimizedWindows: state.minimizedWindows.filter(
           (window) => window.id !== action.id
         ),
