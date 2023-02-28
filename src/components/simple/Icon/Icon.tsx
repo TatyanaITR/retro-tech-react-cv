@@ -1,21 +1,24 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styles from "./Icon.module.css";
 import cn from "classnames";
 import DraggableElement from "../../containers/DraggableElement/DraggableElement";
+import { DesktopContext } from "../../containers/Desktop/Desktop.context";
+import { IHandleIconDoubleClick } from "../../containers/Desktop/Desktop.types";
 
-export interface IIcon {
+interface IIcon {
   iconName: string;
   label: string;
   size: "sm" | "md" | "lg";
-  onDoubleClick: () => void;
+  windowProps: IHandleIconDoubleClick;
 }
 
 const Icon: React.FC<IIcon> = ({
   iconName,
   label,
   size = "md",
-  onDoubleClick,
+  windowProps,
 }) => {
+  const { handleIconDoubleClick } = useContext(DesktopContext);
   const [isSelect, setIsSelect] = useState(false);
 
   const handleIconClick = () => {
@@ -24,25 +27,24 @@ const Icon: React.FC<IIcon> = ({
   const handleContainerBlur = () => {
     setIsSelect(false);
   };
-  const handleDoubleClick = () => {
-    onDoubleClick();
-  };
   const handleTab = (event: React.KeyboardEvent<HTMLDivElement>) => {
     if (event.key === "Tab") {
       setIsSelect(true);
     }
   };
 
-  const iconPath = `${import.meta.env.VITE_PUBLIC_PATH}/icons/${iconName}.svg`;
+  const iconPath = `./icons/${iconName}.svg`;
   const iconClassNames = cn(styles.icon, styles[`icon-${size}`], {
     [styles["icon-select"]]: isSelect,
   });
 
   return (
-    <DraggableElement id={label} className={styles["draggable-icon"]}>
+    <DraggableElement id={windowProps.id} className={styles["draggable-icon"]}>
       <div
         className={iconClassNames}
-        onDoubleClick={handleDoubleClick}
+        onDoubleClick={() => {
+          handleIconDoubleClick(windowProps);
+        }}
         onClick={handleIconClick}
         onBlur={handleContainerBlur}
         onKeyDown={handleTab}

@@ -47,6 +47,7 @@ const Window: React.FC<IWindow> = ({
         break;
     }
   };
+  console.log(content);
   const windowContent = setWindowContentType(windowtypes, content);
   const windowId: string = `window-${id}`;
   const windowCls = cn(styles.window, {

@@ -3,9 +3,10 @@ import {
   Content,
   ContentDefault,
 } from "../../../containers/Desktop/Desktop.types";
+import { NavDataElement } from "../../Navigation/Navigation.types";
 
 interface WindowDefaultContentTypeProps {
-  content: Content[] | [];
+  content: Content[] | [] | NavDataElement[];
 }
 
 export const WindowDefaultContentType: React.FC<

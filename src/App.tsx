@@ -2,6 +2,7 @@ import { Desktop } from "./components/containers/Desktop/Desktop";
 import { ToastContainer } from "react-toastify";
 import React from "react";
 import "react-toastify/dist/ReactToastify.css";
+import { DesktopProvider } from "./components/containers/Desktop/Desktop.context";
 const App = () => {
   return (
     <>
@@ -15,7 +16,9 @@ const App = () => {
         draggable
         pauseOnHover
       />
-      <Desktop />
+      <DesktopProvider>
+        <Desktop />
+      </DesktopProvider>
     </>
   );
 };
