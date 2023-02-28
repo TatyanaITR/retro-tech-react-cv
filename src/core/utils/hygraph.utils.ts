@@ -9,6 +9,12 @@ export const fetchData = async () => {
     header
     windowtypes
     buttons
+    size {
+      ... on Size {
+        w
+        h
+      }
+    }
     content {
       ... on CondentDefault {
         defaultcontent {

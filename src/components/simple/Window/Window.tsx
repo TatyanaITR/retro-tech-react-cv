@@ -5,6 +5,7 @@ import DraggableElement from "../../containers/DraggableElement/DraggableElement
 import { Coords, Size } from "../../../core/types/commonTypes";
 import { Content } from "../../containers/Desktop/Desktop.types";
 import { setWindowContentType } from "./Window.helpers";
+import { appSettings } from "../../../core/config/variables";
 
 export interface IWindow {
   id: string;
@@ -24,7 +25,7 @@ export interface IWindow {
 const Window: React.FC<IWindow> = ({
   id,
   coords,
-  size = { w: 400, h: 300 },
+  size = { w: appSettings.mockWindowSize.w, h: appSettings.mockWindowSize.h },
   header,
   content,
   windowtypes = "default",
@@ -47,7 +48,6 @@ const Window: React.FC<IWindow> = ({
         break;
     }
   };
-  console.log(content);
   const windowContent = setWindowContentType(windowtypes, content);
   const windowId: string = `window-${id}`;
   const windowCls = cn(styles.window, {

@@ -95,7 +95,6 @@ export const DesktopProvider: React.FC<{ children: React.ReactNode }> = ({
       handleRestoreWindow
     );
     setLastCoords(newWindow.coords);
-    console.log(newWindow);
     dispatch({ type: "OPEN_WINDOW", window: newWindow });
   };
 

@@ -1,7 +1,7 @@
 import { IHandleIconDoubleClick, WindowsDataElement } from "./Desktop.types";
 import { IState } from "../../../core/store/windowReducer";
 import { appSettings } from "../../../core/config/variables";
-import { Coords } from "../../../core/types/commonTypes";
+import { Coords, Size } from "../../../core/types/commonTypes";
 import { IWindow } from "../../simple/Window/Window";
 
 const calcWindowCoords = (
@@ -26,13 +26,12 @@ const calcWindowCoords = (
 };
 export const getWindowCoords = (
   isNotFirstWindow: boolean,
-  windowWidth: number,
-  windowHeight: number,
+  size: Size,
   lastCoords: Coords
 ): Coords => {
   let coords: Coords;
   if (isNotFirstWindow) {
-    coords = calcWindowCoords(windowWidth, windowHeight, lastCoords);
+    coords = calcWindowCoords(size.w, size.h, lastCoords);
     if (!coords.x || !coords.y) {
       throw new Error(`There is an error with coordinates`);
     }
@@ -85,8 +84,9 @@ export const createWindow = (
 ): IWindow => {
   let coords: Coords = getWindowCoords(
     isNotFirstWindow,
-    appSettings.mockWindowSize.w,
-    appSettings.mockWindowSize.h,
+    windowContent.size
+      ? { w: windowContent.size.w, h: windowContent.size.h }
+      : { w: appSettings.mockWindowSize.w, h: appSettings.mockWindowSize.h },
     lastCoords
   );
   return {
