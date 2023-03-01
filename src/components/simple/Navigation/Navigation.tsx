@@ -12,7 +12,7 @@ const Navigation: React.FC = () => {
         {navData.map(({ id, header, iconName }) => (
           <DraggableIcon
             key={id}
-            size="md"
+            size="lg"
             label={header}
             iconName={iconName ? iconName : "defaultIcon"}
             windowProps={{ id }}

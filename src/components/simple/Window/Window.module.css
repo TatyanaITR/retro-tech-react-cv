@@ -50,4 +50,5 @@
   border-top: var(--window-border-width) solid var(--content-border-color);
   flex-grow: 1;
   padding: 20px;
+  overflow-y: auto;
 }

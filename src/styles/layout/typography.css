@@ -2,9 +2,9 @@
   font-family: var(--main-font);
   line-height: var(--base-line-height);
   color: var(--base-font-color);
-  font-weight: bold;
+  font-size: var(--base-font-size);
+  font-weight: 500;
   font-synthesis: none;
-  font-size: 11px;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;

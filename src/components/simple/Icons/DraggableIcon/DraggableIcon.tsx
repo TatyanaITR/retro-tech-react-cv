@@ -50,7 +50,7 @@ const DraggableIcon: React.FC<IDraggableIcon> = ({
         tabIndex={0}
       >
         <img src={iconPath} alt={label} className={styles[`icon-img`]} />
-        {label && <span className="icon-label">{label}</span>}
+        {label && <span className={styles["icon-label"]}>{label}</span>}
       </div>
     </DraggableElement>
   );

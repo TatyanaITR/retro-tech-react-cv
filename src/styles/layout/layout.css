@@ -8,12 +8,6 @@ body {
   max-height: 100%;
   width: 100%;
   overflow: hidden;
-  background-color: var(--white);
-  font-size: var(--base-font-size);
-  font-weight: 500;
-  @media (--sm) {
-    background-color: var(--primary);
-  }
 }
 #root {
   width: 100%;
