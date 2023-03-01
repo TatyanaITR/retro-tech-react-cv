@@ -6,8 +6,6 @@ import { Coords, Size } from "../../../core/types/commonTypes";
 import { Content } from "../../containers/Desktop/Desktop.types";
 import { setWindowContentType } from "./Window.helpers";
 import { appSettings } from "../../../core/config/variables";
-import Icon from "../Icons/Icon/Icon";
-import DraggableIcon from "../Icons/DraggableIcon/DraggableIcon";
 
 export interface IWindow {
   id: string;
@@ -36,7 +34,6 @@ const Window: React.FC<IWindow> = ({
   content,
   windowtypes = "default",
   buttons,
-  iconName = "defaultIcon",
   isActive = false,
   onClose,
   onMinimize,
@@ -64,7 +61,7 @@ const Window: React.FC<IWindow> = ({
     <DraggableElement
       className={windowCls}
       id={windowId}
-      handleSelector={`.${styles.headerWrapper}`}
+      handleSelector={`.${styles["window-header"]}`}
       style={{
         width: size.w,
         height: size.h,
@@ -72,13 +69,13 @@ const Window: React.FC<IWindow> = ({
         top: coords.y,
       }}
     >
-      <div onMouseDown={() => onMouseDown(id)}>
-        <div className={styles.headerWrapper}>
-          <div className={styles.headerIcon}>
-            <Icon iconName={iconName} />
-          </div>
-          <div className={styles.headerText}>{header}</div>
-          <div className={styles.windowControls}>
+      <div
+        className={styles["window-wrapper"]}
+        onMouseDown={() => onMouseDown(id)}
+      >
+        <div className={styles["window-header"]}>
+          <div className={styles["header-text"]}>{header}</div>
+          <div className={styles["window-controls"]}>
             {allButtons.includes("minimize") && (
               <button onClick={() => handleButtonClick("minimize")}>-</button>
             )}
@@ -87,7 +84,7 @@ const Window: React.FC<IWindow> = ({
             )}
           </div>
         </div>
-        <div className={styles.windowContent}>{windowContent}</div>
+        <div className={styles["window-content"]}>{windowContent}</div>
       </div>
     </DraggableElement>
   );

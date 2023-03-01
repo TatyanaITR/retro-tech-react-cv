@@ -25,7 +25,6 @@ export function useDragger(id: string, handleSelector?: string) {
     const handle = handleSelector
       ? (target.querySelector(handleSelector) as HTMLElement)
       : target;
-    const handleRect = handle.getBoundingClientRect();
 
     const onMouseDown = (e: MouseEvent) => {
       if (!handle.contains(e.target as HTMLElement)) return;
@@ -53,17 +52,11 @@ export function useDragger(id: string, handleSelector?: string) {
 
       const targetRect = target.getBoundingClientRect();
 
-      if (
-        nextX >= containerRect.left &&
-        nextX <= containerRect.right - targetRect.width
-      ) {
+      if (nextX >= 0 && nextX <= containerRect.right - targetRect.width) {
         target.style.left = `${nextX}px`;
       }
 
-      if (
-        nextY >= containerRect.top + handleRect.height &&
-        nextY <= containerRect.bottom - targetRect.height
-      ) {
+      if (nextY >= 0 && nextY <= containerRect.bottom - targetRect.height) {
         target.style.top = `${nextY}px`;
       }
     };

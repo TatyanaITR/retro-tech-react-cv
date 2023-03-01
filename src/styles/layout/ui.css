@@ -5,3 +5,8 @@
   -moz-user-select: none;
   -ms-user-select: none;
 }
+
+[role="navigation"] {
+  width: 100%;
+  height: 100%;
+}

@@ -6,7 +6,7 @@ import { DesktopContext } from "../../../containers/Desktop/Desktop.context";
 import { IHandleIconDoubleClick } from "../../../containers/Desktop/Desktop.types";
 import { IIcon } from "../Icon/Icon";
 
-interface IDraggableIcon extends IIcon {
+export interface IDraggableIcon extends IIcon {
   label: string;
   windowProps: IHandleIconDoubleClick;
 }

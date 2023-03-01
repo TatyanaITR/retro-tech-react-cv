@@ -1,7 +1,9 @@
 .icon {
   --icon-size: 16px;
-  width: var(--icon-size);
-  height: var(--icon-size);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: calc(var(--icon-size) * 1.25);
 }
 
 .icon-xs {
@@ -18,11 +20,16 @@
 }
 .draggable-icon {
   position: absolute;
+  cursor: pointer;
 }
 .icon-select {
 }
 .icon-img {
-  max-width: 100%;
+  width: var(--icon-size);
+  max-width: var(--icon-size);
+  height: var(--icon-size);
 }
-.iconImg {
+.icon-label {
+  text-align: center;
+  max-width: 100%;
 }

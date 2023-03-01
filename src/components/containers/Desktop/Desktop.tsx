@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import Window from "../../simple/Window/Window";
 import styles from "./Desktop.module.css";
-import Icon from "../../simple/Icons/Icon/Icon";
 import Navigation from "../../simple/Navigation/Navigation";
 import { DesktopContext } from "./Desktop.context";
 import { appSettings } from "../../../core/config/variables";
@@ -22,7 +21,7 @@ export const Desktop: React.FC = () => {
       <div className={styles.desktop} id="desktop">
         <DraggableIcon
           size="lg"
-          label="DoubleClickMe!"
+          label="DoubleClick Me!"
           iconName="navigation"
           windowProps={{
             id: appSettings.navId,

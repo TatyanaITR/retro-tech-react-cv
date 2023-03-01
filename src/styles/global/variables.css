@@ -14,7 +14,12 @@
   --gray-700: #ecedf1;
 
   /* Fonts */
-  --main-font: monospace, sans-serif;
+  --main-font: "Roboto", sans-serif;
   --base-font-color: var(--black);
+  --base-font-size: 16px;
   --base-line-height: 1.2;
+  --base-font-weight: 500;
+
+  /* Borders and shadows*/
+  --shadow: 8px 8px 0 rgba(0, 0, 0, 0.8);
 }
