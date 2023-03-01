@@ -1,21 +1,20 @@
 import React, { useContext, useState } from "react";
-import styles from "./Icon.module.css";
+import styles from "../Icons.module.css";
 import cn from "classnames";
-import DraggableElement from "../../containers/DraggableElement/DraggableElement";
-import { DesktopContext } from "../../containers/Desktop/Desktop.context";
-import { IHandleIconDoubleClick } from "../../containers/Desktop/Desktop.types";
+import DraggableElement from "../../../containers/DraggableElement/DraggableElement";
+import { DesktopContext } from "../../../containers/Desktop/Desktop.context";
+import { IHandleIconDoubleClick } from "../../../containers/Desktop/Desktop.types";
+import { IIcon } from "../Icon/Icon";
 
-interface IIcon {
-  iconName: string;
-  label?: string;
-  size: "sm" | "md" | "lg";
+interface IDraggableIcon extends IIcon {
+  label: string;
   windowProps: IHandleIconDoubleClick;
 }
 
-const Icon: React.FC<IIcon> = ({
-  iconName,
+const DraggableIcon: React.FC<IDraggableIcon> = ({
+  iconName = "defaultIcon",
   label,
-  size = "md",
+  size = "lg",
   windowProps,
 }) => {
   const { handleIconDoubleClick } = useContext(DesktopContext);
@@ -50,11 +49,11 @@ const Icon: React.FC<IIcon> = ({
         onKeyDown={handleTab}
         tabIndex={0}
       >
-        <img src={iconPath} alt={label} className="icon-img" />
+        <img src={iconPath} alt={label} className={styles[`icon-img`]} />
         {label && <span className="icon-label">{label}</span>}
       </div>
     </DraggableElement>
   );
 };
 
-export default Icon;
+export default DraggableIcon;

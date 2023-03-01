@@ -1,0 +1,28 @@
+.icon {
+  --icon-size: 16px;
+  width: var(--icon-size);
+  height: var(--icon-size);
+}
+
+.icon-xs {
+  --icon-size: 16px;
+}
+.icon-sm {
+  --icon-size: 24px;
+}
+.icon-md {
+  --icon-size: 32px;
+}
+.icon-lg {
+  --icon-size: 64px;
+}
+.draggable-icon {
+  position: absolute;
+}
+.icon-select {
+}
+.icon-img {
+  max-width: 100%;
+}
+.iconImg {
+}

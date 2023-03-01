@@ -6,7 +6,8 @@ import { Coords, Size } from "../../../core/types/commonTypes";
 import { Content } from "../../containers/Desktop/Desktop.types";
 import { setWindowContentType } from "./Window.helpers";
 import { appSettings } from "../../../core/config/variables";
-import Icon from "../Icon/Icon";
+import Icon from "../Icons/Icon/Icon";
+import DraggableIcon from "../Icons/DraggableIcon/DraggableIcon";
 
 export interface IWindow {
   id: string;
@@ -74,11 +75,7 @@ const Window: React.FC<IWindow> = ({
       <div onMouseDown={() => onMouseDown(id)}>
         <div className={styles.headerWrapper}>
           <div className={styles.headerIcon}>
-            <Icon
-              size="sm"
-              iconName={iconName}
-              windowProps={{ id: `header-icon-${id}` }}
-            />
+            <Icon iconName={iconName} />
           </div>
           <div className={styles.headerText}>{header}</div>
           <div className={styles.windowControls}>

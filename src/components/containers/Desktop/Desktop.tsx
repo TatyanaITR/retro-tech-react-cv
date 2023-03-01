@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
 import Window from "../../simple/Window/Window";
 import styles from "./Desktop.module.css";
-import Icon from "../../simple/Icon/Icon";
+import Icon from "../../simple/Icons/Icon/Icon";
 import Navigation from "../../simple/Navigation/Navigation";
 import { DesktopContext } from "./Desktop.context";
 import { appSettings } from "../../../core/config/variables";
 import MinimizedWindowsBar from "../MinimizedWindowsBar/MinimizedWindowsBar";
+import DraggableIcon from "../../simple/Icons/DraggableIcon/DraggableIcon";
 
 export const Desktop: React.FC = () => {
   const {
@@ -19,10 +20,10 @@ export const Desktop: React.FC = () => {
   return (
     <>
       <div className={styles.desktop} id="desktop">
-        <Icon
-          size="md"
+        <DraggableIcon
+          size="lg"
           label="DoubleClickMe!"
-          iconName="icon-doc"
+          iconName="navigation"
           windowProps={{
             id: appSettings.navId,
             header: "Navigation",
