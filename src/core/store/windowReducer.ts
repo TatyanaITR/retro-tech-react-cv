@@ -1,8 +1,8 @@
 import { IAction } from "./windowReducer.types";
-import { IWindow } from "../../components/simple/Window/Window";
+import { IBaseWindow } from "../../components/simple/Window/Window";
 
-type IWindowState = Array<IWindow>;
-type IMinimizedWindowState = Array<IWindow>;
+type IWindowState = Array<IBaseWindow>;
+type IMinimizedWindowState = Array<IBaseWindow>;
 
 export interface IState {
   windows: IWindowState;
@@ -67,9 +67,8 @@ function windowReducer(state: IState, action: IAction): IState {
         })),
       };
     case "RESTORE_WINDOW":
-      const restoredWindow: IWindow | undefined = state.minimizedWindows.find(
-        (window) => window.id === action.id
-      );
+      const restoredWindow: IBaseWindow | undefined =
+        state.minimizedWindows.find((window) => window.id === action.id);
       if (!restoredWindow) {
         throw new Error("There is a problem with restored window");
       }

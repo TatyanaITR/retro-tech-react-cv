@@ -1,3 +1,4 @@
+/*
 import React, {
   createContext,
   Reducer,
@@ -6,7 +7,9 @@ import React, {
   useReducer,
   useState,
 } from "react";
+import { getDesktop, supabase } from "../../../core/utils/supabase.utils";
 import {
+  Folder,
   IDesktopContext,
   IHandleIconDoubleClick,
   WindowsDataElement,
@@ -27,42 +30,50 @@ import {
 
 export const DesktopContext = createContext<IDesktopContext>({
   store: { windows: [], minimizedWindows: [] },
-  navData: [],
   handleMinimizeWindow: () => {},
   handleCloseWindow: () => {},
   handleRestoreWindow: () => {},
   handleMouseDownWindow: () => {},
-  handleIconDoubleClick: () => {},
+  /!*navData: [],
+  handleIconDoubleClick: () => {},*!/
 });
 
 export const DesktopProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [data, setData] = useState<WindowsDataElement[]>([]);
+  const [rootFolder, setRootFolder] = useState<Folder>();
+  const [lastCoords, setLastCoords] = useState(appSettings.initialCoords);
+
   useEffect(() => {
-    fetchData()
+    getDesktop()
       .then((data) => {
-        setData(data);
+        if (data) setRootFolder(data[0]);
       })
       .catch((error) => {
         console.error(error);
       });
+    console.log(rootFolder);
   }, []);
-
-  const navData: WindowsDataElement[] = data.map(
-    (window): WindowsDataElement =>
-      ({
-        id: window.id,
-        header: window.header,
-        iconName: window.iconName,
-      } as WindowsDataElement)
-  );
 
   const [store, dispatch] = useReducer<Reducer<IState, IAction>>(
     windowReducer,
     initialState
   );
-  const [lastCoords, setLastCoords] = useState(appSettings.initialCoords);
+
+  const handleCloseWindow = (id: string) => {
+    dispatch({ type: "CLOSE_WINDOW", id });
+  };
+  const handleMinimizeWindow = (id: string) => {
+    dispatch({ type: "MINIMIZE_WINDOW", id });
+  };
+  const handleMouseDownWindow = (id: string) => {
+    dispatch({ type: "ACTIVATE_WINDOW", id });
+  };
+  const handleRestoreWindow = (id: string) => {
+    dispatch({ type: "RESTORE_WINDOW", id });
+  };
+
+  /!*
   const handleIconDoubleClick = useCallback(
     (props: IHandleIconDoubleClick): void => {
       const isWindowAlreadyOpen = isWindowOpen(store, props.id);
@@ -97,33 +108,21 @@ export const DesktopProvider: React.FC<{ children: React.ReactNode }> = ({
     dispatch({ type: "OPEN_WINDOW", window: newWindow });
   };
 
-  const handleCloseWindow = (id: string) => {
-    dispatch({ type: "CLOSE_WINDOW", id });
-  };
 
-  const handleMinimizeWindow = (id: string) => {
-    dispatch({ type: "MINIMIZE_WINDOW", id });
-  };
-  const handleMouseDownWindow = (id: string) => {
-    dispatch({ type: "ACTIVATE_WINDOW", id });
-  };
-  const handleRestoreWindow = (id: string) => {
-    dispatch({ type: "RESTORE_WINDOW", id });
-  };
-
+*!/
   const contextValue: IDesktopContext = {
-    navData,
     store,
     handleMinimizeWindow,
     handleCloseWindow,
     handleRestoreWindow,
-    handleIconDoubleClick,
     handleMouseDownWindow,
+    /!*navData,
+    handleIconDoubleClick,*!/
   };
-
   return (
     <DesktopContext.Provider value={contextValue}>
       {children}
     </DesktopContext.Provider>
   );
 };
+*/

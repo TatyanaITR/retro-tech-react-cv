@@ -7,23 +7,22 @@ import { Content } from "../../containers/Desktop/Desktop.types";
 import { setWindowContentType } from "./Window.helpers";
 import { appSettings } from "../../../core/config/variables";
 
-export interface IWindow {
+export interface IBaseWindow {
   id: string;
   coords: Coords;
   size?: Size;
   header: string;
-  content: Content[] | [];
-  windowtypes?: string;
   buttons?: string[];
   isActive?: boolean;
   iconName?: string;
+  children: React.ReactNode | React.ReactNode[];
   onClose: (id: string) => void;
   onMinimize: (id: string) => void;
   onMouseDown: (id: string) => void;
   onRestore: (id: string) => void;
 }
 
-const Window: React.FC<IWindow> = ({
+const Window: React.FC<IBaseWindow> = ({
   id,
   coords,
   size = {
@@ -31,14 +30,13 @@ const Window: React.FC<IWindow> = ({
     h: appSettings.defaultWindowSize.h,
   },
   header,
-  content,
-  windowtypes = "default",
   buttons,
   isActive = false,
+  children,
   onClose,
   onMinimize,
   onMouseDown,
-}: IWindow) => {
+}: IBaseWindow) => {
   const allButtons = buttons?.length ? buttons : ["minimize", "close"];
   const handleButtonClick = (button: string) => {
     switch (button) {
@@ -52,15 +50,14 @@ const Window: React.FC<IWindow> = ({
         break;
     }
   };
-  const windowContent = setWindowContentType(windowtypes, content);
-  const windowId: string = `window-${id}`;
+  //const windowContent = setWindowContentType(windowtypes, content);
   const windowCls = cn(styles.window, {
     [styles["window-active"]]: isActive,
   });
   return (
     <DraggableElement
       className={windowCls}
-      id={windowId}
+      id={`window-${id}`}
       handleSelector={`.${styles["window-header"]}`}
       style={{
         width: size.w,
@@ -84,7 +81,7 @@ const Window: React.FC<IWindow> = ({
             )}
           </div>
         </div>
-        <div className={styles["window-content"]}>{windowContent}</div>
+        <div className={styles["window-content"]}>{children}</div>
       </div>
     </DraggableElement>
   );

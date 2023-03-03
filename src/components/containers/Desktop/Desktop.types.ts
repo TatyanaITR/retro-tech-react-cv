@@ -1,5 +1,6 @@
 import { Size } from "../../../core/types/commonTypes";
 import { IState } from "../../../core/store/windowReducer";
+import { IDatabase } from "../../../core/utils/supabase.types";
 
 export interface ContentDefault {
   defaultcontent: {
@@ -23,6 +24,26 @@ export type WindowsDataElement = {
   iconName?: string;
 };
 
+/*export interface IFolder {
+  id: string;
+  iconName?: string;
+  tooltip?: string;
+  isRemovable: boolean;
+  title: string;
+  innerDocs?: IFolder[] | IDocument[];
+}*/
+/*export interface IDocument {
+  id: string;
+  iconName?: string;
+  tooltip?: string;
+  isRemovable: boolean;
+  header: string;
+  buttons?: string[];
+  size?: Size;
+  windowtypes: string;
+  content: Content[] | [];
+}*/
+
 export interface IHandleIconDoubleClick {
   id: string;
   header?: string;
@@ -35,10 +56,10 @@ export interface IHandleIconDoubleClick {
 
 export interface IDesktopContext {
   store: IState;
-  navData: WindowsDataElement[];
   handleMinimizeWindow: (id: string) => void;
   handleCloseWindow: (id: string) => void;
   handleRestoreWindow: (id: string) => void;
   handleMouseDownWindow: (id: string) => void;
-  handleIconDoubleClick: (props: IHandleIconDoubleClick) => void;
+  /* navData: WindowsDataElement[];
+   handleIconDoubleClick: (props: IHandleIconDoubleClick) => void;*/
 }

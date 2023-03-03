@@ -1,25 +1,24 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Window from "../../simple/Window/Window";
 import styles from "./Desktop.module.css";
 import Navigation from "../../simple/Navigation/Navigation";
-import { DesktopContext } from "./Desktop.context";
 import { appSettings } from "../../../core/config/variables";
 import MinimizedWindowsBar from "../MinimizedWindowsBar/MinimizedWindowsBar";
 import DraggableIcon from "../../simple/Icons/DraggableIcon/DraggableIcon";
+import { RootState, useStoreDispatch } from "../../../core/store/store";
+import { useSelector } from "react-redux";
+import { getDesktop } from "../../../core/store/files";
 
 export const Desktop: React.FC = () => {
-  const {
-    store,
-    navData,
-    handleCloseWindow,
-    handleMinimizeWindow,
-    handleRestoreWindow,
-    handleMouseDownWindow,
-  } = useContext(DesktopContext);
+  const dispatch = useStoreDispatch();
+  const rootFolder = useSelector((state: RootState) => state.files.rootFolder);
+  useEffect(() => {
+    dispatch(getDesktop());
+  }, [dispatch]);
   return (
     <>
       <div className={styles.desktop} id="desktop">
-        <DraggableIcon
+        {/* <DraggableIcon
           size="lg"
           label="DoubleClick Me!"
           iconName="navigation"
@@ -42,7 +41,7 @@ export const Desktop: React.FC = () => {
         <MinimizedWindowsBar
           minimizedWindows={store.minimizedWindows}
           handleRestoreWindow={handleRestoreWindow}
-        />
+        />*/}
       </div>
     </>
   );
