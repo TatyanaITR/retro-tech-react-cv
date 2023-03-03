@@ -1,8 +1,9 @@
+import { Provider } from "react-redux";
 import { Desktop } from "./components/containers/Desktop/Desktop";
 import { ToastContainer } from "react-toastify";
 import React from "react";
 import "react-toastify/dist/ReactToastify.css";
-import { DesktopProvider } from "./components/containers/Desktop/Desktop.context";
+import { store } from "./core/store/store";
 const App = () => {
   return (
     <>
@@ -16,9 +17,9 @@ const App = () => {
         draggable
         pauseOnHover
       />
-      <DesktopProvider>
+      <Provider store={store}>
         <Desktop />
-      </DesktopProvider>
+      </Provider>
     </>
   );
 };
