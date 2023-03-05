@@ -1,48 +1,57 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getDesktopApi } from "../api/files";
-import { Folder } from "../api/files.types";
+import { getFolderApi } from "../api/files";
+import { IFullFolder } from "../api/files.types";
 import { toast } from "react-toastify";
+import { action } from "@storybook/addon-actions";
 
 interface IFilesState {
-  rootFolder: Folder;
-  bufferFolder: Folder;
-  currentFolder: Folder;
+  rootFolder: IFullFolder;
+  bufferFolder: IFullFolder;
+  currentFolder: IFullFolder;
+  test: any;
   isLoading: boolean;
 }
 
 const initialState: IFilesState = {
-  rootFolder: {} as Folder,
-  bufferFolder: {} as Folder,
-  currentFolder: {} as Folder,
+  rootFolder: {} as IFullFolder,
+  bufferFolder: {} as IFullFolder,
+  currentFolder: {} as IFullFolder,
+  test: {},
   isLoading: true,
 };
 
-export const getDesktop = createAsyncThunk("getDesktop", async () => {
-  return await getDesktopApi();
+export const getFolder = createAsyncThunk("getFolders", async (id: string) => {
+  return await getFolderApi(id);
 });
 
 const filesSlice = createSlice({
   name: "files",
   initialState,
   reducers: {
-    loadFolder: (state, action) => {
-      state.currentFolder = action.payload;
+    setRootFolder: (state, action) => {
+      if (action.payload) {
+        state.rootFolder = action.payload;
+      } else {
+        toast.error("Can't load desktop. Please refresh page", {});
+      }
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(getDesktop.fulfilled, (state, action) => {
+      .addCase(getFolder.fulfilled, (state, action) => {
         state.isLoading = false;
         if (action.payload) {
-          state.rootFolder = action.payload;
+          state.currentFolder = action.payload;
+        } else {
+          console.log("no payload");
         }
       })
-      .addCase(getDesktop.rejected, (state) => {
+      .addCase(getFolder.rejected, (state) => {
         state.isLoading = false;
-        toast.error("Failed to get desktop folder. Please refresh page", {});
+        toast.error("Failed to get folder. Please refresh page", {});
       });
   },
 });
 
-export const { loadFolder } = filesSlice.actions;
+export const { setRootFolder } = filesSlice.actions;
 export default filesSlice.reducer;

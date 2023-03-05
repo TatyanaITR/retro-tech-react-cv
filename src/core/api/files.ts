@@ -1,26 +1,29 @@
 import { supabase } from "../utils/supabase.utils";
-import { Folder } from "./files.types";
+import { Folder, IFullFolder } from "./files.types";
 import { toast } from "react-toastify";
 
-export async function getDesktopApi(): Promise<Folder | null> {
+export async function getFolderApi(id: string): Promise<IFullFolder | null> {
   try {
-    const response = await supabase
+    const { data: folderData } = await supabase
       .from("folders")
       .select("*")
-      .eq("title", "Desktop")
+      .eq("id", id)
       .single();
-    return response.data as Folder;
+    const { data: subfolderIds } = await supabase
+      .from("inner_docs")
+      .select("folders")
+      .eq("folder_id", id)
+      .single();
+    if (!subfolderIds) {
+      return { folder: folderData as Folder, subfolders: [] };
+    }
+    const { data: subfolders } = await supabase
+      .from("folders")
+      .select("id, title, is_removable")
+      .in("id", subfolderIds.folders);
+    return { folder: folderData as Folder, subfolders: subfolders as Folder[] };
   } catch (error) {
-    console.error(error);
-    toast.error("Failed to get desktop folder", {
-      position: toast.POSITION.BOTTOM_RIGHT,
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
+    console.log(error);
     return null;
   }
 }

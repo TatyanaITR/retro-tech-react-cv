@@ -1,20 +1,29 @@
-import React, { useContext, useEffect } from "react";
-import Window from "../../simple/Window/Window";
+import React, { useEffect } from "react";
 import styles from "./Desktop.module.css";
-import Navigation from "../../simple/Navigation/Navigation";
-import { appSettings } from "../../../core/config/variables";
-import MinimizedWindowsBar from "../MinimizedWindowsBar/MinimizedWindowsBar";
-import DraggableIcon from "../../simple/Icons/DraggableIcon/DraggableIcon";
-import { RootState, useStoreDispatch } from "../../../core/store/store";
+import {
+  AppDispatch,
+  RootState,
+  useStoreDispatch,
+} from "../../../core/store/store";
 import { useSelector } from "react-redux";
-import { getDesktop } from "../../../core/store/files";
+import { getFolder, setRootFolder } from "../../../core/store/files";
 
 export const Desktop: React.FC = () => {
   const dispatch = useStoreDispatch();
   const rootFolder = useSelector((state: RootState) => state.files.rootFolder);
+  const currentFolder = useSelector(
+    (state: RootState) => state.files.currentFolder
+  );
+
+  const setRoot = (id: string) => async (dispatch: AppDispatch) => {
+    const currentFolder = await dispatch(getFolder(id));
+    dispatch(setRootFolder(currentFolder.payload));
+  };
+
   useEffect(() => {
-    dispatch(getDesktop());
-  }, [dispatch]);
+    dispatch(setRoot(import.meta.env.VITE_ROOT_ID));
+  }, []);
+
   return (
     <>
       <div className={styles.desktop} id="desktop">
