@@ -2,13 +2,11 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getFolderApi } from "../api/files";
 import { IFullFolder } from "../api/files.types";
 import { toast } from "react-toastify";
-import { action } from "@storybook/addon-actions";
 
 interface IFilesState {
   rootFolder: IFullFolder;
   bufferFolder: IFullFolder;
   currentFolder: IFullFolder;
-  test: any;
   isLoading: boolean;
 }
 
@@ -16,7 +14,6 @@ const initialState: IFilesState = {
   rootFolder: {} as IFullFolder,
   bufferFolder: {} as IFullFolder,
   currentFolder: {} as IFullFolder,
-  test: {},
   isLoading: true,
 };
 

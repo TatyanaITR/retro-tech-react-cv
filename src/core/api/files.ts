@@ -19,7 +19,7 @@ export async function getFolderApi(id: string): Promise<IFullFolder | null> {
     }
     const { data: subfolders } = await supabase
       .from("folders")
-      .select("id, title, is_removable")
+      .select("*")
       .in("id", subfolderIds.folders);
     return { folder: folderData as Folder, subfolders: subfolders as Folder[] };
   } catch (error) {

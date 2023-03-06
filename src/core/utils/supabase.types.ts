@@ -9,32 +9,6 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      docs_shortcuts: {
-        Row: {
-          created_at: string | null
-          id: string
-          is_removable: boolean
-          link_id: string
-          parent_id: string | null
-          updated_at: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          id?: string
-          is_removable?: boolean
-          link_id: string
-          parent_id?: string | null
-          updated_at?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: string
-          is_removable?: boolean
-          link_id?: string
-          parent_id?: string | null
-          updated_at?: string | null
-        }
-      }
       documents: {
         Row: {
           content: string | null
@@ -79,6 +53,32 @@ export interface Database {
           windowtype?: string
         }
       }
+      documents_shortcuts: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_removable: boolean
+          link_id: string
+          parent_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_removable?: boolean
+          link_id: string
+          parent_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_removable?: boolean
+          link_id?: string
+          parent_id?: string | null
+          updated_at?: string | null
+        }
+      }
       folders: {
         Row: {
           created_at: string | null
@@ -88,7 +88,7 @@ export interface Database {
           parent_id: string | null
           title: string
           tooltip: string | null
-          type: string | null
+          type: string
           updated_at: string | null
         }
         Insert: {
@@ -99,7 +99,7 @@ export interface Database {
           parent_id?: string | null
           title: string
           tooltip?: string | null
-          type?: string | null
+          type?: string
           updated_at?: string | null
         }
         Update: {
@@ -110,7 +110,7 @@ export interface Database {
           parent_id?: string | null
           title?: string
           tooltip?: string | null
-          type?: string | null
+          type?: string
           updated_at?: string | null
         }
       }
@@ -144,7 +144,7 @@ export interface Database {
         Row: {
           documents: string[] | null
           documents_shortcuts: string[] | null
-          folder_id: string
+          folder_id: string | null
           folders: string[] | null
           folders_shortcuts: string[] | null
           id: string
@@ -152,7 +152,7 @@ export interface Database {
         Insert: {
           documents?: string[] | null
           documents_shortcuts?: string[] | null
-          folder_id: string
+          folder_id?: string | null
           folders?: string[] | null
           folders_shortcuts?: string[] | null
           id?: string
@@ -160,7 +160,7 @@ export interface Database {
         Update: {
           documents?: string[] | null
           documents_shortcuts?: string[] | null
-          folder_id?: string
+          folder_id?: string | null
           folders?: string[] | null
           folders_shortcuts?: string[] | null
           id?: string

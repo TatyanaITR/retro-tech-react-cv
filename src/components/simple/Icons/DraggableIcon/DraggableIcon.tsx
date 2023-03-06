@@ -2,22 +2,27 @@ import React, { useContext, useState } from "react";
 import styles from "../Icons.module.css";
 import cn from "classnames";
 import DraggableElement from "../../../containers/DraggableElement/DraggableElement";
-import { DesktopContext } from "../../../containers/Desktop/Desktop.context";
 import { IHandleIconDoubleClick } from "../../../containers/Desktop/Desktop.types";
 import { IIcon } from "../Icon/Icon";
 
 export interface IDraggableIcon extends IIcon {
+  id: string;
   label: string;
-  windowProps: IHandleIconDoubleClick;
+  type: string;
+  handleIconDoubleClick: (id: string, type: string) => void;
+  windowProps?: IHandleIconDoubleClick;
 }
 
 const DraggableIcon: React.FC<IDraggableIcon> = ({
+  id,
   iconName = "defaultIcon",
   label,
   size = "lg",
-  windowProps,
+  type,
+  handleIconDoubleClick,
+  //windowProps,
 }) => {
-  const { handleIconDoubleClick } = useContext(DesktopContext);
+  //const { handleIconDoubleClick } = useContext(DesktopContext);
   const [isSelect, setIsSelect] = useState(false);
 
   const handleIconClick = () => {
@@ -38,11 +43,11 @@ const DraggableIcon: React.FC<IDraggableIcon> = ({
   });
 
   return (
-    <DraggableElement id={windowProps.id} className={styles["draggable-icon"]}>
+    <DraggableElement id={id} className={styles["draggable-icon"]}>
       <div
         className={iconClassNames}
         onDoubleClick={() => {
-          handleIconDoubleClick(windowProps);
+          handleIconDoubleClick(id, type);
         }}
         onClick={handleIconClick}
         onBlur={handleContainerBlur}

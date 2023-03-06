@@ -1,25 +1,28 @@
 import React from "react";
+import DraggableElement from "../../containers/DraggableElement/DraggableElement";
+import { FolderContent } from "../FolderContent/FolderContent";
+import { DocumentContent } from "../DocumentContent/DocumentContent";
 import cn from "classnames";
 import styles from "./Window.module.css";
-import DraggableElement from "../../containers/DraggableElement/DraggableElement";
 import { Coords, Size } from "../../../core/types/commonTypes";
-import { Content } from "../../containers/Desktop/Desktop.types";
-import { setWindowContentType } from "./Window.helpers";
 import { appSettings } from "../../../core/config/variables";
+import { useStoreDispatch } from "../../../core/store/store";
+import { closeWindow } from "../../../core/store/windows";
 
 export interface IBaseWindow {
   id: string;
   coords: Coords;
+  title: string;
+  type: "folder" | "document";
   size?: Size;
-  header: string;
   buttons?: string[];
   isActive?: boolean;
   iconName?: string;
-  children: React.ReactNode | React.ReactNode[];
-  onClose: (id: string) => void;
+  //handleIconDoubleClick: (id: string, type: string) => void;
+  /*onClose: (id: string) => void;
   onMinimize: (id: string) => void;
   onMouseDown: (id: string) => void;
-  onRestore: (id: string) => void;
+  onRestore: (id: string) => void;*/
 }
 
 const Window: React.FC<IBaseWindow> = ({
@@ -29,31 +32,53 @@ const Window: React.FC<IBaseWindow> = ({
     w: appSettings.defaultWindowSize.w,
     h: appSettings.defaultWindowSize.h,
   },
-  header,
+  title,
+  type,
   buttons,
   isActive = false,
-  children,
-  onClose,
+}: //handleIconDoubleClick,
+/*onClose,
   onMinimize,
-  onMouseDown,
-}: IBaseWindow) => {
+  onMouseDown,*/
+IBaseWindow) => {
+  const dispatch = useStoreDispatch();
+
+  const handleCloseWindow = (id: string) => {
+    dispatch(closeWindow(id));
+  };
+  /*const handleMinimizeWindow = (id: string) => {
+    dispatch({ type: "MINIMIZE_WINDOW", id });
+  };
+  const handleMouseDownWindow = (id: string) => {
+    dispatch({ type: "ACTIVATE_WINDOW", id });
+  };*/
+
   const allButtons = buttons?.length ? buttons : ["minimize", "close"];
   const handleButtonClick = (button: string) => {
     switch (button) {
       case "close":
-        onClose(id);
+        handleCloseWindow(id);
         break;
-      case "minimize":
+      /*case "minimize":
         onMinimize(id);
-        break;
+        break;*/
       default:
         break;
     }
   };
-  //const windowContent = setWindowContentType(windowtypes, content);
   const windowCls = cn(styles.window, {
     [styles["window-active"]]: isActive,
   });
+  const contentType: React.ReactNode = (() => {
+    switch (type) {
+      case "folder":
+        return <FolderContent id={id} />;
+      case "document":
+        return <DocumentContent id={id} />;
+      default:
+        return <div>Empty window, sorry :(</div>;
+    }
+  })();
   return (
     <DraggableElement
       className={windowCls}
@@ -62,16 +87,18 @@ const Window: React.FC<IBaseWindow> = ({
       style={{
         width: size.w,
         height: size.h,
+        left: 20,
+        top: 50 /*
         left: coords.x,
-        top: coords.y,
+        top: coords.y,*/,
       }}
     >
       <div
         className={styles["window-wrapper"]}
-        onMouseDown={() => onMouseDown(id)}
+        /*onMouseDown={() => onMouseDown(id)}*/
       >
         <div className={styles["window-header"]}>
-          <div className={styles["header-text"]}>{header}</div>
+          <div className={styles["header-text"]}>{title}</div>
           <div className={styles["window-controls"]}>
             {allButtons.includes("minimize") && (
               <button onClick={() => handleButtonClick("minimize")}>-</button>
@@ -81,7 +108,7 @@ const Window: React.FC<IBaseWindow> = ({
             )}
           </div>
         </div>
-        <div className={styles["window-content"]}>{children}</div>
+        <div className={styles["window-content"]}>{contentType}</div>
       </div>
     </DraggableElement>
   );

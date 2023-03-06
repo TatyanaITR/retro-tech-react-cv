@@ -1,6 +1,5 @@
 import { Size } from "../../../core/types/commonTypes";
-import { IState } from "../../../core/store/windowReducer";
-import { IDatabase } from "../../../core/utils/supabase.types";
+import { IState } from "../../../core/store/windowReducer-old";
 
 export interface ContentDefault {
   defaultcontent: {
@@ -19,7 +18,7 @@ export type WindowsDataElement = {
   header: string;
   buttons?: string[];
   size?: Size;
-  windowtypes: string;
+  windowType: string;
   content: Content[] | [];
   iconName?: string;
 };
@@ -40,14 +39,14 @@ export type WindowsDataElement = {
   header: string;
   buttons?: string[];
   size?: Size;
-  windowtypes: string;
+  windowType: string;
   content: Content[] | [];
 }*/
 
 export interface IHandleIconDoubleClick {
   id: string;
   header?: string;
-  windowtypes?: string;
+  windowType?: string;
   buttons?: string[];
   size?: Size;
   content?: [] | WindowsDataElement[];

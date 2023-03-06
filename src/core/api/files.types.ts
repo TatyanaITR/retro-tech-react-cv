@@ -12,4 +12,4 @@ export type Document = Database["public"]["Tables"]["documents"]["Row"];
 export type Folder_shortcut =
   Database["public"]["Tables"]["folders_shortcuts"]["Row"];
 export type Document_shortcut =
-  Database["public"]["Tables"]["docs_shortcuts"]["Row"];
+  Database["public"]["Tables"]["documents_shortcuts"]["Row"];

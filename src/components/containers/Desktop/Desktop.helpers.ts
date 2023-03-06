@@ -1,8 +1,8 @@
 import { IHandleIconDoubleClick, WindowsDataElement } from "./Desktop.types";
-import { IState } from "../../../core/store/windowReducer";
+import { IState } from "../../../core/store/windowReducer-old";
 import { appSettings } from "../../../core/config/variables";
 import { Coords, Size } from "../../../core/types/commonTypes";
-import { IWindow } from "../../simple/Window/Window";
+import { IBaseWindow } from "../../simple/Window/Window";
 
 const calcWindowCoords = (
   width: number,
@@ -54,13 +54,13 @@ export const getWindowData = (
 export const createWindowData = (
   props: IHandleIconDoubleClick
 ): WindowsDataElement => {
-  if (!props.header || !props.windowtypes) {
-    throw new Error("Header and windowtypes are required");
+  if (!props.header || !props.windowType) {
+    throw new Error("Header and windowType are required");
   }
   return {
     id: props.id,
     header: props.header,
-    windowtypes: props.windowtypes,
+    windowType: props.windowType,
     buttons: props.buttons,
     size: props.size,
     content: [],
@@ -73,7 +73,7 @@ export const isWindowOpen = (state: IState, id: string): boolean => {
   );
 };
 
-export const createWindow = (
+/*export const createWindow = (
   windowContent: WindowsDataElement,
   lastCoords: Coords,
   isNotFirstWindow: boolean,
@@ -81,7 +81,7 @@ export const createWindow = (
   handleMinimizeWindow: (id: string) => void,
   handleMouseDownWindow: (id: string) => void,
   handleRestoreWindow: (id: string) => void
-): IWindow => {
+): IBaseWindow => {
   const { size } = windowContent;
   const defaultSize = {
     w: appSettings.defaultWindowSize.w,
@@ -104,4 +104,4 @@ export const createWindow = (
     onMouseDown: handleMouseDownWindow,
     onRestore: handleRestoreWindow,
   };
-};
+};*/

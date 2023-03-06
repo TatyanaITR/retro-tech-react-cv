@@ -80,7 +80,7 @@ export const DesktopProvider: React.FC<{ children: React.ReactNode }> = ({
       if (!isWindowAlreadyOpen) {
         const isNotFirstWindow: boolean = !!store.windows.length;
         let windowData: WindowsDataElement;
-        if (props.header && props.windowtypes) {
+        if (props.header && props.windowType) {
           windowData = createWindowData(props);
         } else {
           windowData = getWindowData(data, props.id);

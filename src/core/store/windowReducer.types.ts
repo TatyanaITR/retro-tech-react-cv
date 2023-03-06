@@ -1,8 +1,8 @@
-import { IWindow } from "../../components/simple/Window/Window";
+import { IBaseWindow } from "../../components/simple/Window/Window";
 
 interface IActionOpenWindow {
   type: "OPEN_WINDOW";
-  window: IWindow;
+  window: IBaseWindow;
 }
 interface IActionCloseWindow {
   type: "CLOSE_WINDOW";

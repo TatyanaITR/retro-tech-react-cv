@@ -1,3 +1,4 @@
+/*
 import React, { useContext } from "react";
 import styles from "./Navigation.module.css";
 import { DesktopContext } from "../../containers/Desktop/Desktop.context";
@@ -24,3 +25,4 @@ const Navigation: React.FC = () => {
 };
 
 export default Navigation;
+*/
