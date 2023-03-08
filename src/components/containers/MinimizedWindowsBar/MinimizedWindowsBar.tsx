@@ -1,11 +1,11 @@
 import styles from "./MinimizedWindowsBar.module.css";
 import MinimizedWindow from "../../simple/MinimizedWindow/MinimizedWindow";
 import React from "react";
-import { IWindow } from "../../simple/Window/Window";
+import { IBaseWindow } from "../../simple/Window/Window";
 import cn from "classnames";
 
 export interface IMinimizedWindowsBar {
-  minimizedWindows: IWindow[];
+  minimizedWindows: IBaseWindow[];
   handleRestoreWindow: (id: string) => void;
 }
 

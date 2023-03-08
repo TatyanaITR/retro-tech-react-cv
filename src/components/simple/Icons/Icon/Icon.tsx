@@ -7,7 +7,7 @@ export interface IIcon {
   size?: "xs" | "sm" | "md" | "lg";
 }
 
-const Icon: React.FC<IIcon> = ({ iconName = "defaultIcon", size = "xs" }) => {
+const Icon: React.FC<IIcon> = ({ iconName, size = "xs" }) => {
   const iconPath = `./icons/${iconName}.svg`;
   const iconClassNames = cn(styles.icon, styles[`icon-${size}`]);
   return (

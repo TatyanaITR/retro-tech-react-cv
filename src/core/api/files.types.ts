@@ -1,15 +1,24 @@
 import { Database } from "../utils/supabase.types";
 
-export type Folder = Database["public"]["Tables"]["folders"]["Row"];
-
 export interface IFullFolder {
   folder: Folder;
-  subfolders: Folder[];
+  children: {
+    subfolders: Folder[];
+    documents: Document[];
+    shortcuts: Shortcut[];
+  };
 }
 
-export type Inner_docs = Database["public"]["Tables"]["inner_docs"]["Row"];
+export type Folder = Database["public"]["Tables"]["folders"]["Row"];
 export type Document = Database["public"]["Tables"]["documents"]["Row"];
-export type Folder_shortcut =
-  Database["public"]["Tables"]["folders_shortcuts"]["Row"];
-export type Document_shortcut =
-  Database["public"]["Tables"]["documents_shortcuts"]["Row"];
+export type Shortcut = Database["public"]["Tables"]["shortcuts"]["Row"];
+
+export enum DocType {
+  Folder = "folder",
+  Document = "document",
+  Shortcut = "shortcut",
+}
+export enum ShortcutType {
+  Folder = DocType.Folder,
+  Document = DocType.Document,
+}

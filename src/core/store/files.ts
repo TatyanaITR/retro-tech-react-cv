@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getFolderApi } from "../api/files";
-import { IFullFolder } from "../api/files.types";
+import { getFullFolderApi } from "../api/files";
+import { Folder, IFullFolder } from "../api/files.types";
 import { toast } from "react-toastify";
+import produce, { Draft } from "immer";
 
 interface IFilesState {
   rootFolder: IFullFolder;
@@ -17,8 +18,8 @@ const initialState: IFilesState = {
   isLoading: true,
 };
 
-export const getFolder = createAsyncThunk("getFolders", async (id: string) => {
-  return await getFolderApi(id);
+export const getFolder = createAsyncThunk("getFolder", async (id: string) => {
+  return await getFullFolderApi(id);
 });
 
 const filesSlice = createSlice({
@@ -38,6 +39,7 @@ const filesSlice = createSlice({
       .addCase(getFolder.fulfilled, (state, action) => {
         state.isLoading = false;
         if (action.payload) {
+          // @ts-ignore
           state.currentFolder = action.payload;
         } else {
           console.log("no payload");

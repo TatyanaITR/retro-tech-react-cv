@@ -1,29 +1,51 @@
 import { supabase } from "../utils/supabase.utils";
-import { Folder, IFullFolder } from "./files.types";
-import { toast } from "react-toastify";
+import { Document, Folder, IFullFolder, Shortcut } from "./files.types";
 
-export async function getFolderApi(id: string): Promise<IFullFolder | null> {
+export async function getFullFolderApi(
+  id: string
+): Promise<IFullFolder | undefined> {
   try {
-    const { data: folderData } = await supabase
+    const { data: folderData, error: folderError } = await supabase.rpc(
+      "get_folder_with_subitems",
+      { id_input: id }
+    );
+    return folderData;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+/*export async function getFullFolderApi(
+  id: string
+): Promise<IFullFolder | undefined> {
+  try {
+    const { data: folderData, error: folderError } = await supabase
       .from("folders")
       .select("*")
       .eq("id", id)
       .single();
-    const { data: subfolderIds } = await supabase
-      .from("inner_docs")
-      .select("folders")
-      .eq("folder_id", id)
-      .single();
-    if (!subfolderIds) {
-      return { folder: folderData as Folder, subfolders: [] };
-    }
-    const { data: subfolders } = await supabase
+
+    const { data: subfoldersData, error: subfoldersError } = await supabase
       .from("folders")
       .select("*")
-      .in("id", subfolderIds.folders);
-    return { folder: folderData as Folder, subfolders: subfolders as Folder[] };
+      .eq("parent_id", id);
+
+    const { data: documentsData, error: documentsError } = await supabase
+      .from("documents")
+      .select("*")
+      .eq("parent_id", id);
+
+    const { data: shortcutsData, error: shortcutsError } = await supabase
+      .from("shortcuts")
+      .select("*")
+      .eq("parent_id", id);
+    return {
+      folder: folderData as Folder,
+      subfolders: subfoldersData as Folder[],
+      documents: documentsData as Document[],
+      shortcuts: shortcutsData as Shortcut[],
+    };
   } catch (error) {
     console.log(error);
-    return null;
   }
-}
+}*/

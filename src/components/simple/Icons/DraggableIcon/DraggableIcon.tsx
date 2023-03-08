@@ -4,21 +4,25 @@ import cn from "classnames";
 import DraggableElement from "../../../containers/DraggableElement/DraggableElement";
 import { IHandleIconDoubleClick } from "../../../containers/Desktop/Desktop.types";
 import { IIcon } from "../Icon/Icon";
+import { defaultIcons } from "./DraggableIcon.helpers";
+import { DocType, ShortcutType } from "../../../../core/api/files.types";
 
 export interface IDraggableIcon extends IIcon {
   id: string;
   label: string;
-  type: string;
+  type: DocType;
+  linkType?: ShortcutType;
   handleIconDoubleClick: (id: string, type: string) => void;
   windowProps?: IHandleIconDoubleClick;
 }
 
 const DraggableIcon: React.FC<IDraggableIcon> = ({
   id,
-  iconName = "defaultIcon",
   label,
   size = "lg",
   type,
+  iconName = defaultIcons[type],
+  linkType,
   handleIconDoubleClick,
   //windowProps,
 }) => {
