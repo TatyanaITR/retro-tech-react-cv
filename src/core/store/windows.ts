@@ -69,8 +69,9 @@ const windowsSlice = createSlice({
       };
     },
     restoreWindow: (state, action) => {
-      const restoredWindow: IBaseWindow | undefined =
-        state.minimizedWindows.find((window) => window.id === action.payload);
+      const restoredWindow = state.minimizedWindows.find(
+        (window) => window.id === action.payload
+      );
       if (!restoredWindow) {
         throw new Error("There is a problem with restored window");
       }
