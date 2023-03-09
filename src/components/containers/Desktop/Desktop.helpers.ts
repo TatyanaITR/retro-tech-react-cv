@@ -1,8 +1,6 @@
 import { IHandleIconDoubleClick, WindowsDataElement } from "./Desktop.types";
-import { IState } from "../../../core/store/windowReducer-old";
 import { appSettings } from "../../../core/config/variables";
 import { Coords, Size } from "../../../core/types/commonTypes";
-import { IBaseWindow } from "../../simple/Window/Window";
 
 const calcWindowCoords = (
   width: number,
@@ -67,11 +65,11 @@ export const createWindowData = (
   };
 };
 
-export const isWindowOpen = (state: IState, id: string): boolean => {
+/*export const isWindowOpen = (state: IState, id: string): boolean => {
   return [...state.windows, ...state.minimizedWindows].some(
     (window) => window.id === id
   );
-};
+};*/
 
 /*export const createWindow = (
   windowContent: WindowsDataElement,

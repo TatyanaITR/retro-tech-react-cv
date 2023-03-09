@@ -6,8 +6,21 @@ import cn from "classnames";
 import styles from "./Window.module.css";
 import { Coords, Size } from "../../../core/types/commonTypes";
 import { appSettings } from "../../../core/config/variables";
-import { useStoreDispatch } from "../../../core/store/store";
-import { closeWindow } from "../../../core/store/windows";
+import { RootState, useStoreDispatch } from "../../../core/store/store";
+import {
+  activateWindow,
+  closeWindow,
+  deactivateWindows,
+  minimizeWindow,
+} from "../../../core/store/windows";
+import {
+  Document,
+  Folder,
+  IFullFolder,
+  Shortcut,
+} from "../../../core/api/files.types";
+import minimizedWindow from "../MinimizedWindow/MinimizedWindow";
+import { useSelector } from "react-redux";
 
 export interface IBaseWindow {
   id: string;
@@ -18,15 +31,16 @@ export interface IBaseWindow {
   buttons?: string[];
   isActive?: boolean;
   iconName?: string;
-  //handleIconDoubleClick: (id: string, type: string) => void;
-  /*onClose: (id: string) => void;
-  onMinimize: (id: string) => void;
-  onMouseDown: (id: string) => void;
-  onRestore: (id: string) => void;*/
+  childNodes?: {
+    subfolders?: Folder[];
+    documents?: Document[];
+    shortcuts?: Shortcut[];
+  };
 }
 
 const Window: React.FC<IBaseWindow> = ({
   id,
+  childNodes,
   coords,
   size = {
     w: appSettings.defaultWindowSize.w,
@@ -36,22 +50,22 @@ const Window: React.FC<IBaseWindow> = ({
   type,
   buttons,
   isActive = false,
-}: //handleIconDoubleClick,
-/*onClose,
-  onMinimize,
-  onMouseDown,*/
-IBaseWindow) => {
+}: IBaseWindow) => {
   const dispatch = useStoreDispatch();
-
+  const isActiveSelector = useSelector(
+    (state: RootState) =>
+      state.windows.openWindows.find((window) => window.id === id)?.isActive ??
+      false
+  );
   const handleCloseWindow = (id: string) => {
     dispatch(closeWindow(id));
   };
-  /*const handleMinimizeWindow = (id: string) => {
-    dispatch({ type: "MINIMIZE_WINDOW", id });
+  const handleMinimizeWindow = (id: string) => {
+    dispatch(minimizeWindow(id));
   };
   const handleMouseDownWindow = (id: string) => {
-    dispatch({ type: "ACTIVATE_WINDOW", id });
-  };*/
+    dispatch(activateWindow(id));
+  };
 
   const allButtons = buttons?.length ? buttons : ["minimize", "close"];
   const handleButtonClick = (button: string) => {
@@ -59,20 +73,22 @@ IBaseWindow) => {
       case "close":
         handleCloseWindow(id);
         break;
-      /*case "minimize":
-        onMinimize(id);
-        break;*/
+      case "minimize":
+        handleMinimizeWindow(id);
+        break;
       default:
         break;
     }
   };
   const windowCls = cn(styles.window, {
-    [styles["window-active"]]: isActive,
+    window,
+    [styles["window-active"]]: isActiveSelector,
   });
   const contentType: React.ReactNode = (() => {
     switch (type) {
-      case "folder":
-        return <FolderContent id={id} />;
+      case "folder": {
+        return <FolderContent childNodes={childNodes} />;
+      }
       case "document":
         return <DocumentContent id={id} />;
       default:
@@ -95,7 +111,7 @@ IBaseWindow) => {
     >
       <div
         className={styles["window-wrapper"]}
-        /*onMouseDown={() => onMouseDown(id)}*/
+        onMouseDown={() => handleMouseDownWindow(id)}
       >
         <div className={styles["window-header"]}>
           <div className={styles["header-text"]}>{title}</div>

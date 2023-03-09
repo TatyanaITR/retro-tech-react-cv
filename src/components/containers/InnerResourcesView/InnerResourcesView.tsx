@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Folder,
   Document,
-  IFullFolder,
   Shortcut,
-  ShortcutType,
   DocType,
 } from "../../../core/api/files.types";
 import DraggableIcon from "../../simple/Icons/DraggableIcon/DraggableIcon";
@@ -12,20 +10,22 @@ import { getFolder } from "../../../core/store/files";
 import { RootState, store, useStoreDispatch } from "../../../core/store/store";
 import { openWindow } from "../../../core/store/windows";
 import { Coords } from "../../../core/types/commonTypes";
-import { appSettings } from "../../../core/config/variables";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { defaultIcons } from "../../simple/Icons/DraggableIcon/DraggableIcon.helpers";
 import GridContainer from "../GridContainer/GridContainer";
-import {Item} from "./InnerResourcesView.types";
+import { Item } from "./InnerResourcesView.types";
 
 interface IInnerResourcesView {
-  folder: IFullFolder;
+  childNodes?: {
+    subfolders?: Folder[];
+    documents?: Document[];
+    shortcuts?: Shortcut[];
+  };
   gridDirection?: "rows" | "columns";
 }
 
 export const InnerResourcesView: React.FC<IInnerResourcesView> = ({
-  folder,
+  childNodes,
   gridDirection = "rows",
 }) => {
   //const [lastCoords, setLastCoords] = useState(appSettings.initialCoords);
@@ -55,13 +55,15 @@ export const InnerResourcesView: React.FC<IInnerResourcesView> = ({
         after many hours of struggle.*/
         const state = store.getState();
         const curFolder = state.files.currentFolder;
-        let newWindow = createFolderWindow(
-          curFolder.folder.id,
-          curFolder.folder.title,
-          { x: 30, y: 50 }
-          //handleIconDoubleClick
+        dispatch(
+          openWindow({
+            id: curFolder.folder.id,
+            title: curFolder.folder.title,
+            type: "folder",
+            childNodes: curFolder.children,
+            coords: { x: 30, y: 50 },
+          })
         );
-        dispatch(openWindow(newWindow));
         break;
       case "document":
         break;
@@ -72,12 +74,18 @@ export const InnerResourcesView: React.FC<IInnerResourcesView> = ({
   const createFolderWindow = (
     id: string,
     title: string,
+    children: {
+      subfolders?: Folder[];
+      documents?: Document[];
+      shortcuts?: Shortcut[];
+    },
     lastCoords: Coords
   ) => {
     return {
       id,
       title,
       lastCoords,
+      children,
     };
   };
   const renderDraggableIcons = (items: Item[]) => {
@@ -95,7 +103,7 @@ export const InnerResourcesView: React.FC<IInnerResourcesView> = ({
     ));
   };
 
-  const { subfolders, documents, shortcuts } = folder.children ?? {};
+  const { subfolders, documents, shortcuts } = childNodes ?? {};
   return (
     <>
       <GridContainer direction={gridDirection}>

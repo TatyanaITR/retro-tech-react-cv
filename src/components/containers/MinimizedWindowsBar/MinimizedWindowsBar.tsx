@@ -6,12 +6,10 @@ import cn from "classnames";
 
 export interface IMinimizedWindowsBar {
   minimizedWindows: IBaseWindow[];
-  handleRestoreWindow: (id: string) => void;
 }
 
 const MinimizedWindowsBar: React.FC<IMinimizedWindowsBar> = ({
   minimizedWindows,
-  handleRestoreWindow,
 }) => {
   const isEmpty = !minimizedWindows.length;
   const barCls = cn(styles.minimizedWindowsBar, {
@@ -20,11 +18,7 @@ const MinimizedWindowsBar: React.FC<IMinimizedWindowsBar> = ({
   return (
     <div id="minimizedWindowsBar" className={barCls}>
       {minimizedWindows.map((window) => (
-        <MinimizedWindow
-          key={window.id}
-          {...window}
-          onRestore={handleRestoreWindow}
-        />
+        <MinimizedWindow key={window.id} {...window} />
       ))}
     </div>
   );

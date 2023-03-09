@@ -12,8 +12,9 @@ import DraggableIcon from "../../simple/Icons/DraggableIcon/DraggableIcon";
 import { appSettings } from "../../../core/config/variables";
 import { Coords, Size } from "../../../core/types/commonTypes";
 import Window from "../../simple/Window/Window";
-import { openWindow } from "../../../core/store/windows";
+import { deactivateWindows, openWindow } from "../../../core/store/windows";
 import { InnerResourcesView } from "../InnerResourcesView/InnerResourcesView";
+import MinimizedWindowsBar from "../MinimizedWindowsBar/MinimizedWindowsBar";
 
 export const Desktop: React.FC = () => {
   const [lastCoords, setLastCoords] = useState(appSettings.initialCoords);
@@ -24,6 +25,9 @@ export const Desktop: React.FC = () => {
   );
   const isLoading = useSelector((state: RootState) => state.files.isLoading);
   const windowsState = useSelector((state: RootState) => state.windows);
+  const activeWindowId = useSelector(
+    (state: RootState) => state.windows.activeWindowId
+  );
 
   const setRoot = (id: string) => async (dispatch: AppDispatch) => {
     const curFolder = await dispatch(getFolder(id));
@@ -34,6 +38,22 @@ export const Desktop: React.FC = () => {
     dispatch(setRoot(import.meta.env.VITE_ROOT_ID));
   }, []);
 
+  const handleDocumentClick = (event: MouseEvent) => {
+    const clickedInsideWindow = (event.target as Element).closest(".window");
+    const clickedInsideActiveWindow = (event.target as Element).closest(
+      `.window-active`
+    );
+    if (!clickedInsideWindow && !clickedInsideActiveWindow) {
+      dispatch(deactivateWindows());
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleDocumentClick);
+    return () => {
+      document.removeEventListener("click", handleDocumentClick);
+    };
+  }, [activeWindowId]);
   return (
     <>
       {isLoading ? (
@@ -41,7 +61,10 @@ export const Desktop: React.FC = () => {
       ) : (
         <div className={styles.desktop} id="desktop">
           {rootFolder.children && (
-            <InnerResourcesView folder={rootFolder} gridDirection="columns" />
+            <InnerResourcesView
+              childNodes={rootFolder.children}
+              gridDirection="columns"
+            />
           )}
           {windowsState.openWindows.map((window) => (
             <Window
@@ -50,8 +73,12 @@ export const Desktop: React.FC = () => {
               title={window.title}
               type="folder"
               coords={window.coords}
+              childNodes={window.childNodes}
             />
           ))}
+          <MinimizedWindowsBar
+            minimizedWindows={windowsState.minimizedWindows}
+          />
         </div>
       )}
     </>

@@ -7,11 +7,13 @@ type IMinimizedWindows = Array<IBaseWindow>;
 export interface IWindowsState {
   openWindows: IWindows;
   minimizedWindows: IMinimizedWindows;
+  activeWindowId: string;
 }
 
 const initialState: IWindowsState = {
   openWindows: [],
   minimizedWindows: [],
+  activeWindowId: "",
 };
 
 const windowsSlice = createSlice({
@@ -21,6 +23,7 @@ const windowsSlice = createSlice({
     openWindow: (state, action) => {
       return {
         ...state,
+        activeWindowId: action.payload.id,
         openWindows: [
           ...state.openWindows.map((window) => ({
             ...window,
@@ -40,13 +43,86 @@ const windowsSlice = createSlice({
       return {
         ...state,
         openWindows: updatedWindows,
+        // @ts-ignore
         minimizedWindows: state.minimizedWindows.filter(
           (window) => window.id !== action.payload
         ),
       };
     },
+    minimizeWindow: (state, action) => {
+      const minimizedWindow = state.openWindows.find(
+        (window) => window.id === action.payload
+      );
+      if (!minimizedWindow) {
+        throw new Error("There is a problem with minimized window");
+      }
+      const updatedWindowsOnMinimize = state.openWindows.map((window) => ({
+        ...window,
+        isActive: window.id !== action.payload && window.isActive,
+      }));
+      return {
+        ...state,
+        openWindows: updatedWindowsOnMinimize.filter(
+          (window) => window.id !== action.payload
+        ),
+        minimizedWindows: [...state.minimizedWindows, minimizedWindow],
+      };
+    },
+    restoreWindow: (state, action) => {
+      const restoredWindow: IBaseWindow | undefined =
+        state.minimizedWindows.find((window) => window.id === action.payload);
+      if (!restoredWindow) {
+        throw new Error("There is a problem with restored window");
+      }
+      const updatedWindowsOnRestore = state.openWindows.map((window) => {
+        if (window.isActive) {
+          return {
+            ...window,
+            isActive: false,
+          };
+        }
+        return window;
+      });
+      return {
+        ...state,
+        openWindows: [
+          ...updatedWindowsOnRestore,
+          { ...restoredWindow, isActive: true },
+        ],
+        minimizedWindows: state.minimizedWindows.filter(
+          (window) => window.id !== action.payload
+        ),
+      };
+    },
+    activateWindow: (state, action) => {
+      return {
+        ...state,
+        activeWindowId: action.payload,
+        openWindows: state.openWindows.map((window) => ({
+          ...window,
+          isActive: window.id === action.payload,
+        })),
+      };
+    },
+    deactivateWindows: (state) => {
+      return {
+        ...state,
+        activeWindowId: "",
+        openWindows: state.openWindows.map((window) => ({
+          ...window,
+          isActive: false,
+        })),
+      };
+    },
   },
 });
 
-export const { openWindow, closeWindow } = windowsSlice.actions;
+export const {
+  openWindow,
+  closeWindow,
+  minimizeWindow,
+  restoreWindow,
+  activateWindow,
+  deactivateWindows,
+} = windowsSlice.actions;
 export default windowsSlice.reducer;

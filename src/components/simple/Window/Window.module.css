@@ -16,7 +16,7 @@
   overflow: hidden;
   resize: both;
   &.window-active {
-    --header-wrapper-bg: var(--black);
+    --header-bg: var(--black);
     z-index: 3999;
   }
 }

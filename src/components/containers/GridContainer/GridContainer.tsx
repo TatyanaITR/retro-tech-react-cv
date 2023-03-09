@@ -14,7 +14,9 @@ const GridContainer = ({
   children,
 }: IGridContainer) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  useGrid({ containerRef, direction, gap });
+  if (children) {
+    useGrid({ containerRef, direction, gap });
+  }
 
   return (
     <div ref={containerRef} className={styles.container}>

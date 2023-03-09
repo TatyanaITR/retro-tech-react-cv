@@ -1,5 +1,4 @@
 import { Size } from "../../../core/types/commonTypes";
-import { IState } from "../../../core/store/windowReducer-old";
 
 export interface ContentDefault {
   defaultcontent: {
@@ -51,14 +50,4 @@ export interface IHandleIconDoubleClick {
   size?: Size;
   content?: [] | WindowsDataElement[];
   handlerFunction?: (...args: any[]) => any;
-}
-
-export interface IDesktopContext {
-  store: IState;
-  handleMinimizeWindow: (id: string) => void;
-  handleCloseWindow: (id: string) => void;
-  handleRestoreWindow: (id: string) => void;
-  handleMouseDownWindow: (id: string) => void;
-  /* navData: WindowsDataElement[];
-   handleIconDoubleClick: (props: IHandleIconDoubleClick) => void;*/
 }
