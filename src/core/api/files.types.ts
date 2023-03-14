@@ -5,20 +5,26 @@ export interface IFullFolder {
   children: {
     subfolders: Folder[];
     documents: Document[];
-    shortcuts: Shortcut[];
+    labels: Label[];
   };
 }
+export interface IRawData {
+  folders: Folder[];
+  documents: Document[];
+  labels: Label[];
+}
+export type FileSystemElement = Folder | Document | Label;
 
 export type Folder = Database["public"]["Tables"]["folders"]["Row"];
 export type Document = Database["public"]["Tables"]["documents"]["Row"];
-export type Shortcut = Database["public"]["Tables"]["shortcuts"]["Row"];
+export type Label = Database["public"]["Tables"]["labels"]["Row"];
 
 export enum DocType {
   Folder = "folder",
   Document = "document",
-  Shortcut = "shortcut",
+  Label = "label",
 }
-export enum ShortcutType {
+export enum LabelType {
   Folder = DocType.Folder,
   Document = DocType.Document,
 }

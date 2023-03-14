@@ -1,5 +1,3 @@
-import { ShortcutType } from "../api/files.types";
-
 export type Json =
   | string
   | number
@@ -90,13 +88,13 @@ export interface Database {
           updated_at?: string | null;
         };
       };
-      shortcuts: {
+      labels: {
         Row: {
           created_at: string | null;
           icon_name: string | null;
           id: string;
           link_id: string;
-          linktype: ShortcutType;
+          linktype: string;
           parent_id: string | null;
           title: string;
           type: string;
@@ -130,11 +128,31 @@ export interface Database {
       [_ in never]: never;
     };
     Functions: {
+      get_all_data: {
+        Args: Record<PropertyKey, never>;
+        Returns: Json[];
+      };
+      get_data: {
+        Args: Record<PropertyKey, never>;
+        Returns: Json[];
+      };
+      get_documents: {
+        Args: Record<PropertyKey, never>;
+        Returns: Json[];
+      };
       get_folder_with_subitems: {
         Args: {
           id_input: string;
         };
         Returns: Json;
+      };
+      get_folders: {
+        Args: Record<PropertyKey, never>;
+        Returns: Json[];
+      };
+      get_Labels: {
+        Args: Record<PropertyKey, never>;
+        Returns: Json[];
       };
     };
     Enums: {
@@ -155,7 +173,7 @@ export interface Database {
         updated_at: string;
         windowtype: string;
       };
-      document_shortcut: {
+      document_Label: {
         created_at: string;
         id: string;
         is_removable: boolean;
@@ -163,7 +181,7 @@ export interface Database {
         parent_id: string;
         updated_at: string;
       };
-      document_shortcut_type: {
+      document_Label_type: {
         id: string;
         name: string;
         folder_id: string;
@@ -184,7 +202,7 @@ export interface Database {
         type: string;
         updated_at: string;
       };
-      folder_shortcut: {
+      folder_Label: {
         created_at: string;
         id: string;
         is_removable: boolean;
@@ -192,7 +210,7 @@ export interface Database {
         parent_id: string;
         updated_at: string;
       };
-      folder_shortcut_type: {
+      folder_Label_type: {
         id: string;
         name: string;
         folder_id: string;
@@ -206,8 +224,8 @@ export interface Database {
         folder: Database["public"]["CompositeTypes"]["folder_type"];
         subfolders: unknown;
         documents: unknown;
-        folder_shortcuts: unknown;
-        document_shortcuts: unknown;
+        folder_Labels: unknown;
+        document_Labels: unknown;
       };
     };
   };
