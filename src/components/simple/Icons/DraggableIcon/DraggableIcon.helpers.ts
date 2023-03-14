@@ -1,15 +1,15 @@
-import { DocType, ShortcutType } from "../../../../core/api/files.types";
+import { DocType, LabelType } from "../../../../core/api/files.types";
 
 export const defaultIcons = {
   [DocType.Folder]: "default-folder",
   [DocType.Document]: "default-file",
-  [DocType.Shortcut]: (shortcutType: ShortcutType) => {
-    if (shortcutType === ShortcutType.Folder) {
+  [DocType.Label]: (LabelType: LabelType) => {
+    if (LabelType === LabelType.Folder) {
       return "default-folder";
-    } else if (shortcutType === ShortcutType.Document) {
+    } else if (LabelType === LabelType.Document) {
       return "default-file";
     } else {
-      throw new Error("Invalid shortcut type");
+      throw new Error("Invalid Label type");
     }
   },
 };

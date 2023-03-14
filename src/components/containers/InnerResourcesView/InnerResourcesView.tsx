@@ -2,7 +2,7 @@ import React from "react";
 import {
   Folder,
   Document,
-  Shortcut,
+  Label,
   DocType,
 } from "../../../core/api/files.types";
 import DraggableIcon from "../../simple/Icons/DraggableIcon/DraggableIcon";
@@ -19,7 +19,7 @@ interface IInnerResourcesView {
   childNodes?: {
     subfolders?: Folder[];
     documents?: Document[];
-    shortcuts?: Shortcut[];
+    labels?: Label[];
   };
   gridDirection?: "rows" | "columns";
 }
@@ -30,11 +30,9 @@ export const InnerResourcesView: React.FC<IInnerResourcesView> = ({
 }) => {
   //const [lastCoords, setLastCoords] = useState(appSettings.initialCoords);
   const dispatch = useStoreDispatch();
-  const rootFolder = useSelector((state: RootState) => state.files.rootFolder);
   const currentFolder = useSelector(
     (state: RootState) => state.files.currentFolder
   );
-  const isLoading = useSelector((state: RootState) => state.files.isLoading);
   const windowsState = useSelector((state: RootState) => state.windows);
 
   const handleIconDoubleClick = (id: string, type: string) => {
@@ -77,7 +75,7 @@ export const InnerResourcesView: React.FC<IInnerResourcesView> = ({
     children: {
       subfolders?: Folder[];
       documents?: Document[];
-      shortcuts?: Shortcut[];
+      labels?: Label[];
     },
     lastCoords: Coords
   ) => {
@@ -89,7 +87,7 @@ export const InnerResourcesView: React.FC<IInnerResourcesView> = ({
     };
   };
   const renderDraggableIcons = (items: Item[]) => {
-    return items.map(({ id, title, icon_name, type, linktype }) => (
+    return items.map(({ id, title, icon_name, type, linkType }) => (
       <DraggableIcon
         key={id}
         id={id}
@@ -97,19 +95,19 @@ export const InnerResourcesView: React.FC<IInnerResourcesView> = ({
         type={type}
         label={title}
         iconName={icon_name ?? undefined}
-        linkType={type === DocType.Shortcut ? linktype : undefined}
+        linkType={type === DocType.Label ? linkType : undefined}
         handleIconDoubleClick={handleIconDoubleClick}
       />
     ));
   };
 
-  const { subfolders, documents, shortcuts } = childNodes ?? {};
+  const { subfolders, documents, labels } = childNodes ?? {};
   return (
     <>
       <GridContainer direction={gridDirection}>
         {subfolders && renderDraggableIcons(subfolders as Item[])}
         {documents && renderDraggableIcons(documents as Item[])}
-        {shortcuts && renderDraggableIcons(shortcuts as Item[])}
+        {labels && renderDraggableIcons(labels as Item[])}
       </GridContainer>
     </>
   );

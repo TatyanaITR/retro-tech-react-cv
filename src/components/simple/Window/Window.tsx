@@ -10,16 +10,9 @@ import { RootState, useStoreDispatch } from "../../../core/store/store";
 import {
   activateWindow,
   closeWindow,
-  deactivateWindows,
   minimizeWindow,
 } from "../../../core/store/windows";
-import {
-  Document,
-  Folder,
-  IFullFolder,
-  Shortcut,
-} from "../../../core/api/files.types";
-import minimizedWindow from "../MinimizedWindow/MinimizedWindow";
+import { Document, Folder, Label } from "../../../core/api/files.types";
 import { useSelector } from "react-redux";
 
 export interface IBaseWindow {
@@ -34,7 +27,7 @@ export interface IBaseWindow {
   childNodes?: {
     subfolders?: Folder[];
     documents?: Document[];
-    shortcuts?: Shortcut[];
+    labels?: Label[];
   };
 }
 

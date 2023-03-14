@@ -1,17 +1,12 @@
 import React from "react";
-import {
-  Document,
-  Folder,
-  IFullFolder,
-  Shortcut,
-} from "../../../core/api/files.types";
+import { Document, Folder, Label } from "../../../core/api/files.types";
 import { InnerResourcesView } from "../../containers/InnerResourcesView/InnerResourcesView";
 
 export interface IFolderContent {
   childNodes?: {
     subfolders?: Folder[];
     documents?: Document[];
-    shortcuts?: Shortcut[];
+    labels?: Label[];
   };
 }
 
