@@ -17,11 +17,26 @@ export interface IRawData {
   documents: Document[];
   labels: Label[];
 }
-export type FileSystemElement = Folder | Document | Label;
 
-export type Folder = Database["public"]["Tables"]["folders"]["Row"];
-export type Document = Database["public"]["Tables"]["documents"]["Row"];
-export type Label = Database["public"]["Tables"]["labels"]["Row"];
+export type Folder = Omit<
+  Database["public"]["Tables"]["folders"]["Row"],
+  "type"
+> & {
+  type: DocType;
+};
+export type Document = Omit<
+  Database["public"]["Tables"]["documents"]["Row"],
+  "type"
+> & {
+  type: DocType;
+};
+export type Label = Omit<
+  Database["public"]["Tables"]["labels"]["Row"],
+  "type"
+> & {
+  type: DocType;
+  label_type: LabelType;
+};
 
 export enum DocType {
   Folder = "folder",

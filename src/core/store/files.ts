@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getDataApi, getFullFolderApi } from "../api/files";
+import { getDataApi } from "../api/files";
 import { IFullFolder, IRawData, ITree } from "../api/files.types";
-import { toast } from "react-toastify";
 import { buildTree, mergeAndSortObjects } from "./files.helpers";
 
 interface IFilesState {

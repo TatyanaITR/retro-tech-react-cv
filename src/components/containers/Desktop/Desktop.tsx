@@ -7,12 +7,9 @@ import Window from "../../simple/Window/Window";
 import { deactivateWindows } from "../../../core/store/windows";
 import { InnerResourcesView } from "../InnerResourcesView/InnerResourcesView";
 import MinimizedWindowsBar from "../MinimizedWindowsBar/MinimizedWindowsBar";
-import { buildTree } from "../../../core/store/files.helpers";
 
 export const Desktop: React.FC = () => {
   const dispatch = useStoreDispatch();
-  const rootFolder = useSelector((state: RootState) => state.files.rootFolder);
-  const rawData = useSelector((state: RootState) => state.files.rawData);
   const foldersTree = useSelector(
     (state: RootState) => state.files.foldersTree
   );
@@ -22,19 +19,10 @@ export const Desktop: React.FC = () => {
     (state: RootState) => state.windows.activeWindowId
   );
 
-  /*  useEffect(() => {
-    dispatch(loadRootFolder(import.meta.env.VITE_ROOT_ID));
-  }, []);*/
-
   useEffect(() => {
     dispatch(getRawData());
   }, []);
-  /*
-  useEffect(() => {
-    if (rawData.folders) {
-      console.log(foldersTree);
-    }
-  }, [foldersTree]);*/
+
 
   const handleDocumentClick = (event: MouseEvent) => {
     const clickedInsideWindow = (event.target as Element).closest(".window");
@@ -58,9 +46,9 @@ export const Desktop: React.FC = () => {
         <p>Loading...</p>
       ) : (
         <div className={styles.desktop} id="desktop">
-          {rootFolder.children && (
+          {foldersTree && (
             <InnerResourcesView
-              childNodes={rootFolder.children}
+              childNodes={foldersTree[0]}
               gridDirection="columns"
             />
           )}

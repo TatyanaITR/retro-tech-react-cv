@@ -12,7 +12,7 @@ import {
   closeWindow,
   minimizeWindow,
 } from "../../../core/store/windows";
-import { Document, Folder, Label } from "../../../core/api/files.types";
+import { ITree} from "../../../core/api/files.types";
 import { useSelector } from "react-redux";
 
 export interface IBaseWindow {
@@ -24,11 +24,7 @@ export interface IBaseWindow {
   buttons?: string[];
   isActive?: boolean;
   iconName?: string;
-  childNodes?: {
-    subfolders?: Folder[];
-    documents?: Document[];
-    labels?: Label[];
-  };
+  childNodes?: ITree;
 }
 
 const Window: React.FC<IBaseWindow> = ({
@@ -96,10 +92,8 @@ const Window: React.FC<IBaseWindow> = ({
       style={{
         width: size.w,
         height: size.h,
-        left: 20,
-        top: 50 /*
         left: coords.x,
-        top: coords.y,*/,
+        top: coords.y,
       }}
     >
       <div

@@ -2,18 +2,16 @@ import React, { useState } from "react";
 import styles from "../Icons.module.css";
 import cn from "classnames";
 import DraggableElement from "../../../containers/DraggableElement/DraggableElement";
-import { IHandleIconDoubleClick } from "../../../containers/Desktop/Desktop.types";
 import { IIcon } from "../Icon/Icon";
 import { defaultIcons } from "./DraggableIcon.helpers";
-import { DocType, LabelType } from "../../../../core/api/files.types";
+import { DocType } from "../../../../core/api/files.types";
 
 export interface IDraggableIcon extends IIcon {
   id: string;
   label: string;
   type: DocType;
-  linkType?: LabelType;
+  linkType?: string;
   handleIconDoubleClick: (id: string, type: string) => void;
-  windowProps?: IHandleIconDoubleClick;
 }
 
 const DraggableIcon: React.FC<IDraggableIcon> = ({
@@ -22,11 +20,8 @@ const DraggableIcon: React.FC<IDraggableIcon> = ({
   size = "lg",
   type,
   iconName = defaultIcons[type],
-  linkType,
   handleIconDoubleClick,
-  //windowProps,
 }) => {
-  //const { handleIconDoubleClick } = useContext(DesktopContext);
   const [isSelect, setIsSelect] = useState(false);
 
   const handleIconClick = () => {

@@ -4,23 +4,17 @@ import {
   Document,
   Label,
   DocType,
+  ITree,
 } from "../../../core/api/files.types";
 import DraggableIcon from "../../simple/Icons/DraggableIcon/DraggableIcon";
-//import { getFolder } from "../../../core/store/files";
 import { RootState, store, useStoreDispatch } from "../../../core/store/store";
 import { openWindow } from "../../../core/store/windows";
-import { Coords } from "../../../core/types/commonTypes";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import GridContainer from "../GridContainer/GridContainer";
-import { Item } from "./InnerResourcesView.types";
 
 interface IInnerResourcesView {
-  childNodes?: {
-    subfolders?: Folder[];
-    documents?: Document[];
-    labels?: Label[];
-  };
+  childNodes?: ITree;
   gridDirection?: "rows" | "columns";
 }
 
@@ -41,7 +35,7 @@ export const InnerResourcesView: React.FC<IInnerResourcesView> = ({
       handleOpenWindow(id, type);
     }
   };
-  const handleOpenWindow = async (id: string, type: string) => {
+  const handleOpenWindow = (id: string, type: string) => {
     switch (type) {
       case "folder":
         if (id != currentFolder.folder.id) {
@@ -55,7 +49,7 @@ export const InnerResourcesView: React.FC<IInnerResourcesView> = ({
         const curFolder = state.files.currentFolder;
         dispatch(
           openWindow({
-            id: curFolder.folder.id,
+            id: id,
             title: curFolder.folder.title,
             type: "folder",
             childNodes: curFolder.children,
@@ -69,11 +63,11 @@ export const InnerResourcesView: React.FC<IInnerResourcesView> = ({
         toast.error("Can't load desktop. Please refresh page", {});
     }
   };
-  const createFolderWindow = (
+  /*  const createFolderWindow = (
     id: string,
     title: string,
     children: {
-      subfolders?: Folder[];
+      folders?: Folder[];
       documents?: Document[];
       labels?: Label[];
     },
@@ -85,30 +79,39 @@ export const InnerResourcesView: React.FC<IInnerResourcesView> = ({
       lastCoords,
       children,
     };
+  };*/
+  type MergedItem = Folder | Document | Label;
+
+  const convertITreeToMergedItems = (items: ITree[]): MergedItem[] => {
+    return items.map((item) => item.item);
   };
-  const renderDraggableIcons = (items: Item[]) => {
-    return items.map(({ id, title, icon_name, type, linkType }) => (
+
+  function isLabel(item: MergedItem): item is Label {
+    return item.type === DocType.Label;
+  }
+
+  const renderDraggableIcons = (items: MergedItem[]) => {
+    return items.map((item) => (
       <DraggableIcon
-        key={id}
-        id={id}
+        key={item.id}
+        id={item.id}
         size="lg"
-        type={type}
-        label={title}
-        iconName={icon_name ?? undefined}
-        linkType={type === DocType.Label ? linkType : undefined}
+        type={item.type}
+        label={item.title}
+        iconName={item.icon_name ?? undefined}
+        linkType={isLabel(item) ? item.link_type : undefined}
         handleIconDoubleClick={handleIconDoubleClick}
       />
     ));
   };
 
-  const { subfolders, documents, labels } = childNodes ?? {};
   return (
     <>
-      <GridContainer direction={gridDirection}>
-        {subfolders && renderDraggableIcons(subfolders as Item[])}
-        {documents && renderDraggableIcons(documents as Item[])}
-        {labels && renderDraggableIcons(labels as Item[])}
-      </GridContainer>
+      {childNodes && (
+        <GridContainer direction={gridDirection}>
+          {renderDraggableIcons(convertITreeToMergedItems(childNodes.children))}
+        </GridContainer>
+      )}
     </>
   );
 };
