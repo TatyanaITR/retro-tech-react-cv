@@ -1,0 +1,38 @@
+import { Document, Folder, IRawData, ITree, Label } from "../api/files.types";
+
+export const mergeAndSortObjects = (
+  rawData: IRawData
+): (Folder | Document | Label)[] => {
+  const combinedItems = [
+    ...(rawData.folders || []),
+    ...(rawData.documents || []),
+    ...(rawData.labels || []),
+  ];
+
+  return combinedItems.sort((a, b) =>
+    (a.parent_id || "").localeCompare(b.parent_id || "")
+  );
+};
+
+export function buildTree(
+  items: (Folder | Document | Label)[],
+  parentID: string | null
+): ITree[] {
+  const result: ITree[] = [];
+
+  for (const item of items) {
+    if (item.parent_id === parentID) {
+      let children: ITree[] = [];
+
+      if (item.type === "folder") {
+        children = buildTree(items, item.id);
+      }
+
+      result.push({
+        item: item,
+        children: children,
+      });
+    }
+  }
+  return result;
+}

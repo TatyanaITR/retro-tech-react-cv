@@ -8,6 +8,10 @@ export interface IFullFolder {
     labels: Label[];
   };
 }
+export interface ITree {
+  item: Folder | Document | Label;
+  children: ITree[];
+}
 export interface IRawData {
   folders: Folder[];
   documents: Document[];

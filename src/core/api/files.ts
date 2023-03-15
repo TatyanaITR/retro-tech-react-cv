@@ -3,13 +3,16 @@ import { Document, Folder, IFullFolder, Label } from "./files.types";
 
 export async function getDataApi() {
   try {
-    const {
-      data: [folders, documents, labels],
-    } = await supabase.rpc("get_data");
-    if (![folders, documents, labels]) {
+    const { data: dataArray } = await supabase.rpc("get_data");
+    if (!dataArray) {
       throw new Error("Data not found");
     }
-    return { folders, documents, labels };
+    const [data] = dataArray;
+    return {
+      folders: data.folders as Folder[],
+      documents: data.documents as Document[],
+      labels: data.labels as Label[],
+    };
   } catch (error: any) {
     console.error("Error fetching data:", error);
     return {
@@ -17,21 +20,5 @@ export async function getDataApi() {
       documents: [] as Document[],
       labels: [] as Label[],
     };
-  }
-}
-
-export async function getFullFolderApi(id: string): Promise<IFullFolder> {
-  try {
-    const { data: folderData } = await supabase.rpc(
-      "get_folder_with_subitems",
-      { id_input: id }
-    );
-    if (!folderData) {
-      throw new Error("Folder data not found");
-    }
-    return folderData;
-  } catch (folderError) {
-    console.log(folderError);
-    throw new Error("Error fetching folder data");
   }
 }

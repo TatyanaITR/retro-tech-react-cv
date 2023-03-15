@@ -6,7 +6,7 @@ import {
   DocType,
 } from "../../../core/api/files.types";
 import DraggableIcon from "../../simple/Icons/DraggableIcon/DraggableIcon";
-import { getFolder } from "../../../core/store/files";
+//import { getFolder } from "../../../core/store/files";
 import { RootState, store, useStoreDispatch } from "../../../core/store/store";
 import { openWindow } from "../../../core/store/windows";
 import { Coords } from "../../../core/types/commonTypes";
@@ -45,7 +45,7 @@ export const InnerResourcesView: React.FC<IInnerResourcesView> = ({
     switch (type) {
       case "folder":
         if (id != currentFolder.folder.id) {
-          await dispatch(getFolder(id));
+          //await dispatch(getFolder(id));
         }
         /*Here I directly get the state, because for some unknown reason
         it is in this place that the value in the currentFolder selector
