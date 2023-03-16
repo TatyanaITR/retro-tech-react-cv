@@ -36,3 +36,21 @@ export function buildTree(
   }
   return result;
 }
+
+export const findFolderById = (
+  tree: ITree[],
+  id: string
+): ITree | undefined => {
+  for (const node of tree) {
+    if (node.item.type === "folder" && node.item.id === id) {
+      return node as ITree;
+    }
+
+    const foundFolder = findFolderById(node.children, id);
+    if (foundFolder) {
+      return foundFolder;
+    }
+  }
+
+  return undefined;
+};

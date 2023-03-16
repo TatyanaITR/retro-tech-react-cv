@@ -21,6 +21,7 @@ const windowsSlice = createSlice({
   initialState,
   reducers: {
     openWindow: (state, action) => {
+      console.log(action.payload);
       return {
         ...state,
         activeWindowId: action.payload.id,

@@ -1,12 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getDataApi } from "../api/files";
 import { IFullFolder, IRawData, ITree } from "../api/files.types";
-import { buildTree, mergeAndSortObjects } from "./files.helpers";
+import {
+  buildTree,
+  findFolderById,
+  mergeAndSortObjects,
+} from "./files.helpers";
 
 interface IFilesState {
   rootFolder: IFullFolder;
   bufferFolder: IFullFolder;
-  currentFolder: IFullFolder;
+  currentFolder: ITree;
   foldersTree: ITree[];
   rawData: IRawData;
   isLoading: boolean;
@@ -16,7 +20,7 @@ interface IFilesState {
 const initialState: IFilesState = {
   rootFolder: {} as IFullFolder,
   bufferFolder: {} as IFullFolder,
-  currentFolder: {} as IFullFolder,
+  currentFolder: {} as ITree,
   foldersTree: [] as ITree[],
   rawData: {} as IRawData,
   isLoading: true,
@@ -43,6 +47,15 @@ const filesSlice = createSlice({
         state.foldersTree = buildTree(mergeAndSortObjects(state.rawData), null);
       }
     },
+    getFolder: (state, action) => {
+      const folderId = action.payload;
+      const foundFolder = findFolderById(state.foldersTree, folderId);
+      if (foundFolder) {
+        state.currentFolder = foundFolder;
+      } else {
+        console.error(`Папка с id ${folderId} не найдена`);
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -55,7 +68,6 @@ const filesSlice = createSlice({
           state.rawData = action.payload;
           const data = mergeAndSortObjects(action.payload);
           state.foldersTree = buildTree(data, null);
-          console.log(state.foldersTree);
           state.isLoading = false;
         }
       })
@@ -66,5 +78,5 @@ const filesSlice = createSlice({
   },
 });
 
-export const { buildFolderTree } = filesSlice.actions;
+export const { buildFolderTree, getFolder } = filesSlice.actions;
 export default filesSlice.reducer;

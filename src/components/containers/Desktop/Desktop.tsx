@@ -23,7 +23,6 @@ export const Desktop: React.FC = () => {
     dispatch(getRawData());
   }, []);
 
-
   const handleDocumentClick = (event: MouseEvent) => {
     const clickedInsideWindow = (event.target as Element).closest(".window");
     const clickedInsideActiveWindow = (event.target as Element).closest(
@@ -48,7 +47,7 @@ export const Desktop: React.FC = () => {
         <div className={styles.desktop} id="desktop">
           {foldersTree && (
             <InnerResourcesView
-              childNodes={foldersTree[0]}
+              childNodes={foldersTree[0].children}
               gridDirection="columns"
             />
           )}

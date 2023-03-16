@@ -12,7 +12,7 @@ import {
   closeWindow,
   minimizeWindow,
 } from "../../../core/store/windows";
-import { ITree} from "../../../core/api/files.types";
+import { ITree } from "../../../core/api/files.types";
 import { useSelector } from "react-redux";
 
 export interface IBaseWindow {
@@ -24,7 +24,7 @@ export interface IBaseWindow {
   buttons?: string[];
   isActive?: boolean;
   iconName?: string;
-  childNodes?: ITree;
+  childNodes?: ITree[];
 }
 
 const Window: React.FC<IBaseWindow> = ({
