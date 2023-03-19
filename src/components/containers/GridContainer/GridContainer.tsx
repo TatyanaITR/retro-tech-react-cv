@@ -8,20 +8,20 @@ export interface IGridContainer {
   children: React.ReactNode;
 }
 
-const GridContainer = ({
-  direction = "columns",
-  gap = 20,
-  children,
-}: IGridContainer) => {
+export const GridContainer = ({
+                         direction = "columns",
+                         gap = 20,
+                         children,
+                       }: IGridContainer) => {
+  if (!children) return null;
+
   const containerRef = useRef<HTMLDivElement>(null);
-  if (children) {
-    useGrid({ containerRef, direction, gap });
-  }
+  useGrid({ containerRef, direction, gap });
 
   return (
-    <div ref={containerRef} className={styles.container}>
-      {children}
-    </div>
+      <div ref={containerRef} className={styles.container}>
+        {children}
+      </div>
   );
 };
 

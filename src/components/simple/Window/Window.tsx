@@ -12,7 +12,7 @@ import {
   closeWindow,
   minimizeWindow,
 } from "../../../core/store/windows";
-import { ITree } from "../../../core/api/files.types";
+import {DocType} from "../../../core/api/files.types";
 import { useSelector } from "react-redux";
 
 export interface IBaseWindow {
@@ -24,12 +24,10 @@ export interface IBaseWindow {
   buttons?: string[];
   isActive?: boolean;
   iconName?: string;
-  childNodes?: ITree[];
 }
 
 const Window: React.FC<IBaseWindow> = ({
   id,
-  childNodes,
   coords,
   size = {
     w: appSettings.defaultWindowSize.w,
@@ -38,7 +36,7 @@ const Window: React.FC<IBaseWindow> = ({
   title,
   type,
   buttons,
-  isActive = false,
+  //isActive = false,
 }: IBaseWindow) => {
   const dispatch = useStoreDispatch();
   const isActiveSelector = useSelector(
@@ -75,10 +73,10 @@ const Window: React.FC<IBaseWindow> = ({
   });
   const contentType: React.ReactNode = (() => {
     switch (type) {
-      case "folder": {
-        return <FolderContent childNodes={childNodes} />;
+      case DocType.Folder: {
+        return <FolderContent id={id} />;
       }
-      case "document":
+      case DocType.Document:
         return <DocumentContent id={id} />;
       default:
         return <div>Empty window, sorry :(</div>;

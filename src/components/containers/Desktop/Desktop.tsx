@@ -56,9 +56,8 @@ export const Desktop: React.FC = () => {
               key={window.id}
               id={window.id}
               title={window.title}
-              type="folder"
+              type={window.type}
               coords={window.coords}
-              childNodes={window.childNodes}
             />
           ))}
           <MinimizedWindowsBar

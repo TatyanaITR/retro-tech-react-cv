@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getDataApi } from "../api/files";
-import { IFullFolder, IRawData, ITree } from "../api/files.types";
+import { IFullFolder, Document, IRawData, ITree } from "../api/files.types";
 import {
   buildTree,
   findFolderById,
@@ -11,6 +11,7 @@ interface IFilesState {
   rootFolder: IFullFolder;
   bufferFolder: IFullFolder;
   currentFolder: ITree;
+  currentDoc: Document;
   foldersTree: ITree[];
   rawData: IRawData;
   isLoading: boolean;
@@ -21,6 +22,7 @@ const initialState: IFilesState = {
   rootFolder: {} as IFullFolder,
   bufferFolder: {} as IFullFolder,
   currentFolder: {} as ITree,
+  currentDoc: {} as Document,
   foldersTree: [] as ITree[],
   rawData: {} as IRawData,
   isLoading: true,
@@ -56,6 +58,18 @@ const filesSlice = createSlice({
         console.error(`Папка с id ${folderId} не найдена`);
       }
     },
+    getDocument: (state, action) => {
+      const docId = action.payload;
+      const foundDoc = state.rawData.documents.find(el => el.id === docId)
+      if (foundDoc) {
+        state.currentDoc = foundDoc;
+      } else {
+        console.error(`Файл с id ${docId} не найден`);
+      }
+    },
+    setIsLoading: (state, action) => {
+      state.isLoading = action.payload
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -78,5 +92,5 @@ const filesSlice = createSlice({
   },
 });
 
-export const { buildFolderTree, getFolder } = filesSlice.actions;
+export const { buildFolderTree, getFolder, getDocument, setIsLoading } = filesSlice.actions;
 export default filesSlice.reducer;

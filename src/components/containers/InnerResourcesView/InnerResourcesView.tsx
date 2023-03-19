@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   Folder,
   Document,
@@ -10,12 +10,10 @@ import DraggableIcon from "../../simple/Icons/DraggableIcon/DraggableIcon";
 import { RootState, useStoreDispatch } from "../../../core/store/store";
 import { openWindow } from "../../../core/store/windows";
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
 import GridContainer from "../GridContainer/GridContainer";
-import { getFolder } from "../../../core/store/files";
 
 interface IInnerResourcesView {
-  childNodes?: ITree[];
+  childNodes: ITree[];
   gridDirection?: "rows" | "columns";
 }
 
@@ -25,64 +23,25 @@ export const InnerResourcesView: React.FC<IInnerResourcesView> = ({
 }) => {
   //const [lastCoords, setLastCoords] = useState(appSettings.initialCoords);
   const dispatch = useStoreDispatch();
-  const currentFolder = useSelector(
-    (state: RootState) => state.files.currentFolder
-  );
   const windowsState = useSelector((state: RootState) => state.windows);
-
-  const [folderToOpen, setFolderToOpen] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (currentFolder && folderToOpen) {
-      console.log(currentFolder.children);
-      dispatch(
-        openWindow({
-          id: currentFolder.item.id,
-          title: currentFolder.item.title,
-          type: "folder",
-          childNodes: currentFolder.children || [],
-          coords: { x: 30, y: 50 },
-        })
-      );
-      setFolderToOpen(null); // сбросить состояние folderToOpen
-    }
-  }, [currentFolder, dispatch, folderToOpen]);
 
   const handleIconDoubleClick = (id: string, type: string) => {
     const isRoot = windowsState.openWindows.length === 0;
-    if (isRoot || type === "document") {
+    if (isRoot || type === DocType.Document) {
       handleOpenWindow(id, type);
     }
   };
   const handleOpenWindow = (id: string, type: string) => {
-    switch (type) {
-      case "folder":
-        dispatch(getFolder(id));
-        setFolderToOpen(id);
-        break;
-      case "document":
-        break;
-      case "default":
-        toast.error("Can't load desktop. Please refresh page", {});
-    }
+    dispatch(
+        openWindow({
+          id: id,
+          title: "Окно",
+          type: type,
+          coords: { x: 30, y: 50 },
+        })
+    );
   };
-  /*  const createFolderWindow = (
-    id: string,
-    title: string,
-    children: {
-      folders?: Folder[];
-      documents?: Document[];
-      labels?: Label[];
-    },
-    lastCoords: Coords
-  ) => {
-    return {
-      id,
-      title,
-      lastCoords,
-      children,
-    };
-  };*/
+
   type MergedItem = Folder | Document | Label;
 
   function isLabel(item: MergedItem): item is Label {
@@ -109,7 +68,7 @@ export const InnerResourcesView: React.FC<IInnerResourcesView> = ({
 
   return (
     <>
-      {childNodes && (
+      {childNodes?.length!==0 && (
         <GridContainer direction={gridDirection}>
           {renderDraggableIcons(childNodes)}
         </GridContainer>
