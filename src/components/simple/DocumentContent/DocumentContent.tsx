@@ -2,6 +2,7 @@ import React, {useEffect} from "react";
 import {useSelector} from "react-redux";
 import {RootState, useStoreDispatch} from "../../../core/store/store";
 import {getDocument} from "../../../core/store/files";
+import {ParseDocumentContent} from "./ParseDocumentContent";
 
 export interface IDocumentContent {
   id: string;
@@ -15,9 +16,11 @@ export const DocumentContent: React.FC<IDocumentContent> = ({ id }) => {
     useEffect(() => {
         dispatch(getDocument(id));
     }, [id, dispatch]);
-  return (
-    <>
-        {currentDoc.id === id && currentDoc.content}
-    </>
-  );
+    return (
+        <>
+            {currentDoc.id === id && (
+                <ParseDocumentContent content={currentDoc.content} />
+            )}
+        </>
+    );
 };
