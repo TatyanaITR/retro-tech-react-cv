@@ -7,9 +7,8 @@ import {
   ITree,
 } from "../../../core/api/files.types";
 import DraggableIcon from "../../simple/Icons/DraggableIcon/DraggableIcon";
-import { RootState, useStoreDispatch } from "../../../core/store/store";
+import { useStoreDispatch } from "../../../core/store/store";
 import { openWindow } from "../../../core/store/windows";
-import { useSelector } from "react-redux";
 import GridContainer from "../GridContainer/GridContainer";
 
 interface IInnerResourcesView {
@@ -23,11 +22,9 @@ export const InnerResourcesView: React.FC<IInnerResourcesView> = ({
 }) => {
   //const [lastCoords, setLastCoords] = useState(appSettings.initialCoords);
   const dispatch = useStoreDispatch();
-  const windowsState = useSelector((state: RootState) => state.windows);
 
   const handleIconDoubleClick = (id: string, type: string) => {
-    const isRoot = windowsState.openWindows.length === 0;
-    if (isRoot || type === DocType.Document) {
+    if (type === DocType.Folder || type === DocType.Document) {
       handleOpenWindow(id, type);
     }
   };

@@ -4,11 +4,10 @@ import { IBaseWindow } from "../Window/Window";
 import { useStoreDispatch } from "../../../core/store/store";
 import {
   closeWindow,
-  minimizeWindow,
   restoreWindow,
 } from "../../../core/store/windows";
 
-const MinimizedWindow: React.FC<IBaseWindow> = ({ id, title }: IBaseWindow) => {
+const MinimizedWindow: React.FC<IBaseWindow> = ({ generatedId, title }: IBaseWindow) => {
   const dispatch = useStoreDispatch();
 
   const handleCloseWindow = (id: string) => {
@@ -17,19 +16,19 @@ const MinimizedWindow: React.FC<IBaseWindow> = ({ id, title }: IBaseWindow) => {
   const handleRestoreWindow = (id: string) => {
     dispatch(restoreWindow(id));
   };
-  const windowId: string = `window-${id}`;
+  const windowId: string = `window-${generatedId}`;
   const windowClass: string = `window ${styles["window-minimized"]}`;
   return (
     <div className={windowClass} id={windowId}>
       <div className={styles.headerWrapper}>
         <div
           className={styles.headerText}
-          onClick={() => handleRestoreWindow(id)}
+          onClick={() => handleRestoreWindow(generatedId)}
         >
           {title}
         </div>
         <div className={styles.windowControls}>
-          <button onClick={() => handleCloseWindow(id)}>X</button>
+          <button onClick={() => handleCloseWindow(generatedId)}>X</button>
         </div>
       </div>
     </div>

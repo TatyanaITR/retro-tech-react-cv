@@ -53,8 +53,9 @@ export const Desktop: React.FC = () => {
           )}
           {windowsState.openWindows.map((window) => (
             <Window
-              key={window.id}
+              key={window.generatedId}
               id={window.id}
+              generatedId={window.generatedId}
               title={window.title}
               type={window.type}
               coords={window.coords}

@@ -17,6 +17,7 @@ import { useSelector } from "react-redux";
 
 export interface IBaseWindow {
   id: string;
+  generatedId: string;
   coords: Coords;
   title: string;
   type: "folder" | "document";
@@ -28,6 +29,7 @@ export interface IBaseWindow {
 
 const Window: React.FC<IBaseWindow> = ({
   id,
+  generatedId,
   coords,
   size = {
     w: appSettings.defaultWindowSize.w,
@@ -41,7 +43,7 @@ const Window: React.FC<IBaseWindow> = ({
   const dispatch = useStoreDispatch();
   const isActiveSelector = useSelector(
     (state: RootState) =>
-      state.windows.openWindows.find((window) => window.id === id)?.isActive ??
+      state.windows.openWindows.find((window) => window.generatedId === generatedId)?.isActive ??
       false
   );
   const handleCloseWindow = (id: string) => {
@@ -58,10 +60,10 @@ const Window: React.FC<IBaseWindow> = ({
   const handleButtonClick = (button: string) => {
     switch (button) {
       case "close":
-        handleCloseWindow(id);
+        handleCloseWindow(generatedId);
         break;
       case "minimize":
-        handleMinimizeWindow(id);
+        handleMinimizeWindow(generatedId);
         break;
       default:
         break;
@@ -85,7 +87,7 @@ const Window: React.FC<IBaseWindow> = ({
   return (
     <DraggableElement
       className={windowCls}
-      id={`window-${id}`}
+      id={`window-${generatedId}`}
       handleSelector={`.${styles["window-header"]}`}
       style={{
         width: size.w,
@@ -96,7 +98,7 @@ const Window: React.FC<IBaseWindow> = ({
     >
       <div
         className={styles["window-wrapper"]}
-        onMouseDown={() => handleMouseDownWindow(id)}
+        onMouseDown={() => handleMouseDownWindow(generatedId)}
       >
         <div className={styles["window-header"]}>
           <div className={styles["header-text"]}>{title}</div>

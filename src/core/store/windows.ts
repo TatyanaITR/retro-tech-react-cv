@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { IBaseWindow } from "../../components/simple/Window/Window";
+import {nanoid} from "nanoid";
 
 type IWindows = Array<IBaseWindow>;
 type IMinimizedWindows = Array<IBaseWindow>;
@@ -21,21 +22,25 @@ const windowsSlice = createSlice({
   initialState,
   reducers: {
     openWindow: (state, action) => {
+      const genId = nanoid();
       return {
         ...state,
-        activeWindowId: action.payload.id,
+        activeWindowId: genId,
         openWindows: [
           ...state.openWindows.map((window) => ({
             ...window,
             isActive: false,
           })),
-          { ...action.payload, isActive: true },
+          { ...action.payload,
+            isActive: true,
+            generatedId: genId
+          },
         ],
       };
     },
     closeWindow: (state, action) => {
       const updatedWindows = state.openWindows
-        .filter((window) => window.id !== action.payload)
+        .filter((window) => window.generatedId !== action.payload)
         .map((window, index, windows) => ({
           ...window,
           isActive: windows.length === 1 || index === windows.length - 1,
@@ -45,32 +50,32 @@ const windowsSlice = createSlice({
         openWindows: updatedWindows,
         // @ts-ignore
         minimizedWindows: state.minimizedWindows.filter(
-          (window) => window.id !== action.payload
+          (window) => window.generatedId !== action.payload
         ),
       };
     },
     minimizeWindow: (state, action) => {
       const minimizedWindow = state.openWindows.find(
-        (window) => window.id === action.payload
+        (window) => window.generatedId === action.payload
       );
       if (!minimizedWindow) {
         throw new Error("There is a problem with minimized window");
       }
       const updatedWindowsOnMinimize = state.openWindows.map((window) => ({
         ...window,
-        isActive: window.id !== action.payload && window.isActive,
+        isActive: window.generatedId !== action.payload && window.isActive,
       }));
       return {
         ...state,
         openWindows: updatedWindowsOnMinimize.filter(
-          (window) => window.id !== action.payload
+          (window) => window.generatedId !== action.payload
         ),
         minimizedWindows: [...state.minimizedWindows, minimizedWindow],
       };
     },
     restoreWindow: (state, action) => {
       const restoredWindow = state.minimizedWindows.find(
-        (window) => window.id === action.payload
+        (window) => window.generatedId === action.payload
       );
       if (!restoredWindow) {
         throw new Error("There is a problem with restored window");
@@ -91,7 +96,7 @@ const windowsSlice = createSlice({
           { ...restoredWindow, isActive: true },
         ],
         minimizedWindows: state.minimizedWindows.filter(
-          (window) => window.id !== action.payload
+          (window) => window.generatedId !== action.payload
         ),
       };
     },
@@ -101,7 +106,7 @@ const windowsSlice = createSlice({
         activeWindowId: action.payload,
         openWindows: state.openWindows.map((window) => ({
           ...window,
-          isActive: window.id === action.payload,
+          isActive: window.generatedId === action.payload,
         })),
       };
     },

@@ -18,7 +18,7 @@ const MinimizedWindowsBar: React.FC<IMinimizedWindowsBar> = ({
   return (
     <div id="minimizedWindowsBar" className={barCls}>
       {minimizedWindows.map((window) => (
-        <MinimizedWindow key={window.id} {...window} />
+        <MinimizedWindow key={window.generatedId} {...window} />
       ))}
     </div>
   );
